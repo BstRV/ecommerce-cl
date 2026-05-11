@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react"
 import { useCart } from "@/lib/cart-store"
+import MobileMenu from "./MobileMenu"
+import ThemeToggle from "./ThemeToggle"
 
 const NAV_LINKS = [
   { label: "Colecciones", href: "/colecciones" },
@@ -67,6 +69,7 @@ export function Navbar() {
           >
             <SearchIcon />
           </a>
+          <ThemeToggle />
           <a
             href="/carrito"
             className="relative text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -79,6 +82,7 @@ export function Navbar() {
               </span>
             )}
           </a>
+          <MobileMenu />
         </div>
       </nav>
     </header>
