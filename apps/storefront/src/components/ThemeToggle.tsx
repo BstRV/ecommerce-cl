@@ -4,19 +4,15 @@ import { useEffect, useState } from 'react'
 
 export default function ThemeToggle() {
   const [dark, setDark] = useState(false)
-  const [mounted, setMounted] = useState(false)
 
   // Inicializar desde localStorage o preferencia del sistema
   useEffect(() => {
-    setMounted(true)
     const stored = localStorage.getItem('theme')
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
     const isDark = stored === 'dark' || (!stored && prefersDark)
     setDark(isDark)
     document.documentElement.classList.toggle('dark', isDark)
   }, [])
-
-  if (!mounted) return null
 
   function toggle() {
     const next = !dark
