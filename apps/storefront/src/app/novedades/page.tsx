@@ -1,8 +1,8 @@
 import { MOCK_PRODUCTS, CATEGORIES, filterByCategory } from '@/lib/mock-data'
-import PageHeader from '@/components/PageHeader'
-import FilterBar from '@/components/FilterBar'
-import ProductGrid from '@/components/ProductGrid'
-import EmptyState from '@/components/EmptyState'
+import { PageHeader } from '@/components/PageHeader'
+import { FilterBar } from '@/components/FilterBar'
+import { ProductGrid } from '@/components/ProductGrid'
+import { EmptyState } from '@/components/EmptyState'
 
 interface SearchParams {
   categoria?: string
