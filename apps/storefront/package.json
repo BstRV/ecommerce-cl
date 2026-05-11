@@ -9,11 +9,12 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@ecommerce-preset/types": "*",
+    "@ecommerce-preset/ui": "*",
     "next": "16.2.6",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "@ecommerce-preset/ui": "*",
-    "@ecommerce-preset/types": "*"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

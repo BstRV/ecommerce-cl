@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { z } from 'zod'
 import { useCart } from '@/lib/cart-store'
 import { SHIPPING_CONFIG } from '@/lib/constants'
 
@@ -17,9 +18,46 @@ interface ShippingFormData {
   region: string
 }
 
-export default function CheckoutPage() {
-  const [step, setStep] = useState<Step>('envio')
-  const [formData, setFormData] = useState<ShippingFormData>({
+// Zod schema para validación robusta de formulario
+const checkoutFormSchema = z.object({
+  nombre: z.string().min(1, 'Nombre requerido').trim(),
+  apellido: z.string().min(1, 'Apellido requerido').trim(),
+  email: z.string().email('Email inválido').min(1, 'Email requerido'),
+  telefono: z.string().min(1, 'Teléfono requerido').trim(),
+  direccion: z.string().min(1, 'Dirección requerida').trim(),
+  ciudad: z.string().min(1, 'Ciudad requerida').trim(),
+  region: z.string().min(1, 'Región requerida'),
+})
+
+const initialFormData = (): ShippingFormData => {
+  // Cargar datos guardados del localStorage con validación Zod
+  if (typeof window === 'undefined') {
+    return {
+      nombre: '',
+      apellido: '',
+      email: '',
+      telefono: '',
+      direccion: '',
+      ciudad: '',
+      region: '',
+    }
+  }
+
+  const saved = localStorage.getItem('checkout_form_data')
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved)
+      // Validar que los datos cargados cumplan con el schema
+      const validated = checkoutFormSchema.safeParse(parsed)
+      if (validated.success) {
+        return validated.data
+      }
+    } catch {
+      // Si hay error al parsear, ignorar
+    }
+  }
+
+  return {
     nombre: '',
     apellido: '',
     email: '',
@@ -27,22 +65,15 @@ export default function CheckoutPage() {
     direccion: '',
     ciudad: '',
     region: '',
-  })
+  }
+}
+
+export default function CheckoutPage() {
+  const [step, setStep] = useState<Step>('envio')
+  const [formData, setFormData] = useState<ShippingFormData>(initialFormData())
   const [errors, setErrors] = useState<Partial<Record<keyof ShippingFormData, string>>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { items, subtotal } = useCart()
-
-  // Cargar datos guardados del localStorage al montar
-  useEffect(() => {
-    const saved = localStorage.getItem('checkout_form_data')
-    if (saved) {
-      try {
-        setFormData(JSON.parse(saved))
-      } catch {
-        // Si hay error al parsear, ignorar
-      }
-    }
-  }, [])
 
   // Guardar datos al cambiar
   useEffect(() => {
@@ -55,16 +86,16 @@ export default function CheckoutPage() {
   const validateForm = (): boolean => {
     const newErrors: typeof errors = {}
 
-    if (!formData.nombre.trim()) newErrors.nombre = 'Nombre requerido'
-    if (!formData.apellido.trim()) newErrors.apellido = 'Apellido requerido'
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email requerido'
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Email inválido'
+    // Usar Zod para validación robusta
+    const validation = checkoutFormSchema.safeParse(formData)
+
+    if (!validation.success) {
+      // Extraer errores del schema
+      validation.error.issues.forEach((issue) => {
+        const fieldName = issue.path[0] as keyof ShippingFormData
+        newErrors[fieldName] = issue.message
+      })
     }
-    if (!formData.direccion.trim()) newErrors.direccion = 'Dirección requerida'
-    if (!formData.ciudad.trim()) newErrors.ciudad = 'Ciudad requerida'
-    if (!formData.region) newErrors.region = 'Región requerida'
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -148,10 +179,10 @@ export default function CheckoutPage() {
                       value={formData.nombre}
                       onChange={handleInputChange}
                       className={`px-3 py-2.5 text-sm border rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground bg-background ${
-                        errors.nombre ? 'border-red-500' : 'border-input'
+                        errors.nombre ? 'border-destructive' : 'border-input'
                       }`}
                     />
-                    {errors.nombre && <p className="text-xs text-red-500">{errors.nombre}</p>}
+                    {errors.nombre && <p className="text-xs text-destructive">{errors.nombre}</p>}
                   </div>
                   <div className="flex flex-col gap-1.5">
                     <label htmlFor="apellido" className="text-sm font-medium">Apellido</label>
@@ -163,10 +194,10 @@ export default function CheckoutPage() {
                       value={formData.apellido}
                       onChange={handleInputChange}
                       className={`px-3 py-2.5 text-sm border rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground bg-background ${
-                        errors.apellido ? 'border-red-500' : 'border-input'
+                        errors.apellido ? 'border-destructive' : 'border-input'
                       }`}
                     />
-                    {errors.apellido && <p className="text-xs text-red-500">{errors.apellido}</p>}
+                    {errors.apellido && <p className="text-xs text-destructive">{errors.apellido}</p>}
                   </div>
                 </div>
 
@@ -180,10 +211,10 @@ export default function CheckoutPage() {
                     value={formData.email}
                     onChange={handleInputChange}
                     className={`px-3 py-2.5 text-sm border rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground bg-background ${
-                      errors.email ? 'border-red-500' : 'border-input'
+                      errors.email ? 'border-destructive' : 'border-input'
                     }`}
                   />
-                  {errors.email && <p className="text-xs text-red-500">{errors.email}</p>}
+                  {errors.email && <p className="text-xs text-destructive">{errors.email}</p>}
                 </div>
 
                 <div className="flex flex-col gap-1.5">
@@ -195,8 +226,11 @@ export default function CheckoutPage() {
                     placeholder="+56 9 1234 5678"
                     value={formData.telefono}
                     onChange={handleInputChange}
-                    className="px-3 py-2.5 text-sm border border-input bg-background rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground"
+                    className={`px-3 py-2.5 text-sm border rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground bg-background ${
+                      errors.telefono ? 'border-destructive' : 'border-input'
+                    }`}
                   />
+                  {errors.telefono && <p className="text-xs text-destructive">{errors.telefono}</p>}
                 </div>
 
                 <div className="flex flex-col gap-1.5">
@@ -209,10 +243,10 @@ export default function CheckoutPage() {
                     value={formData.direccion}
                     onChange={handleInputChange}
                     className={`px-3 py-2.5 text-sm border rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground bg-background ${
-                      errors.direccion ? 'border-red-500' : 'border-input'
+                      errors.direccion ? 'border-destructive' : 'border-input'
                     }`}
                   />
-                  {errors.direccion && <p className="text-xs text-red-500">{errors.direccion}</p>}
+                  {errors.direccion && <p className="text-xs text-destructive">{errors.direccion}</p>}
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -226,10 +260,10 @@ export default function CheckoutPage() {
                       value={formData.ciudad}
                       onChange={handleInputChange}
                       className={`px-3 py-2.5 text-sm border rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground bg-background ${
-                        errors.ciudad ? 'border-red-500' : 'border-input'
+                        errors.ciudad ? 'border-destructive' : 'border-input'
                       }`}
                     />
-                    {errors.ciudad && <p className="text-xs text-red-500">{errors.ciudad}</p>}
+                    {errors.ciudad && <p className="text-xs text-destructive">{errors.ciudad}</p>}
                   </div>
                   <div className="flex flex-col gap-1.5">
                     <label htmlFor="region" className="text-sm font-medium">Región</label>
@@ -239,7 +273,7 @@ export default function CheckoutPage() {
                       value={formData.region}
                       onChange={handleInputChange}
                       className={`px-3 py-2.5 text-sm border rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring text-foreground bg-background ${
-                        errors.region ? 'border-red-500' : 'border-input'
+                        errors.region ? 'border-destructive' : 'border-input'
                       }`}
                     >
                       <option value="">Seleccionar</option>
@@ -259,7 +293,7 @@ export default function CheckoutPage() {
                       <option value="Aysén">Aysén</option>
                       <option value="Magallanes">Magallanes</option>
                     </select>
-                    {errors.region && <p className="text-xs text-red-500">{errors.region}</p>}
+                    {errors.region && <p className="text-xs text-destructive">{errors.region}</p>}
                   </div>
                 </div>
 
