@@ -7,11 +7,12 @@ import { EmptyState } from "@/components/EmptyState"
 import { Navbar } from "@/components/Navbar"
 import { Footer } from "@/components/Footer"
 import { formatPrice } from "@ecommerce-preset/types"
+import { SHIPPING_CONFIG } from "@/lib/constants"
 
 export default function CartPage() {
   const { items, subtotal, clear } = useCart()
 
-  const shipping = subtotal >= 50000 ? 0 : 3990
+  const shipping = subtotal >= SHIPPING_CONFIG.FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_CONFIG.STANDARD_SHIPPING_COST
   const total = subtotal + shipping
 
   return (
@@ -75,7 +76,7 @@ export default function CartPage() {
 
                 {shipping > 0 && (
                   <p className="text-xs text-muted-foreground">
-                    Envío gratis en compras sobre {formatPrice(50000, "CLP")}
+                    Envío gratis en compras sobre {formatPrice(SHIPPING_CONFIG.FREE_SHIPPING_THRESHOLD, "CLP")}
                   </p>
                 )}
 

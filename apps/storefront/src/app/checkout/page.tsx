@@ -1,17 +1,102 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useCart } from '@/lib/cart-store'
+import { SHIPPING_CONFIG } from '@/lib/constants'
 
 type Step = 'envio' | 'resumen'
 
+interface ShippingFormData {
+  nombre: string
+  apellido: string
+  email: string
+  telefono: string
+  direccion: string
+  ciudad: string
+  region: string
+}
+
 export default function CheckoutPage() {
   const [step, setStep] = useState<Step>('envio')
+  const [formData, setFormData] = useState<ShippingFormData>({
+    nombre: '',
+    apellido: '',
+    email: '',
+    telefono: '',
+    direccion: '',
+    ciudad: '',
+    region: '',
+  })
+  const [errors, setErrors] = useState<Partial<Record<keyof ShippingFormData, string>>>({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const { items, subtotal } = useCart()
 
-  const shippingCost = subtotal >= 49990 ? 0 : 3990
+  // Cargar datos guardados del localStorage al montar
+  useEffect(() => {
+    const saved = localStorage.getItem('checkout_form_data')
+    if (saved) {
+      try {
+        setFormData(JSON.parse(saved))
+      } catch {
+        // Si hay error al parsear, ignorar
+      }
+    }
+  }, [])
+
+  // Guardar datos al cambiar
+  useEffect(() => {
+    localStorage.setItem('checkout_form_data', JSON.stringify(formData))
+  }, [formData])
+
+  const shippingCost = subtotal >= SHIPPING_CONFIG.FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_CONFIG.STANDARD_SHIPPING_COST
   const total = subtotal + shippingCost
+
+  const validateForm = (): boolean => {
+    const newErrors: typeof errors = {}
+
+    if (!formData.nombre.trim()) newErrors.nombre = 'Nombre requerido'
+    if (!formData.apellido.trim()) newErrors.apellido = 'Apellido requerido'
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email requerido'
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Email inválido'
+    }
+    if (!formData.direccion.trim()) newErrors.direccion = 'Dirección requerida'
+    if (!formData.ciudad.trim()) newErrors.ciudad = 'Ciudad requerida'
+    if (!formData.region) newErrors.region = 'Región requerida'
+
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+    // Limpiar error para este campo
+    if (errors[name as keyof ShippingFormData]) {
+      setErrors(prev => {
+        const newErrors = { ...prev }
+        delete newErrors[name as keyof ShippingFormData]
+        return newErrors
+      })
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    if (!validateForm()) return
+
+    setIsSubmitting(true)
+    try {
+      // Simular delay de envío
+      await new Promise(resolve => setTimeout(resolve, 500))
+      setStep('resumen')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   if (items.length === 0) {
     return (
@@ -51,76 +136,139 @@ export default function CheckoutPage() {
             <section>
               <h1 className="font-display text-2xl mb-6 tracking-tight">Dirección de envío</h1>
 
-              <form
-                className="flex flex-col gap-4"
-                onSubmit={(e) => { e.preventDefault(); setStep('resumen') }}
-              >
+              <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5">
                     <label htmlFor="nombre" className="text-sm font-medium">Nombre</label>
-                    <input id="nombre" name="nombre" type="text" required placeholder="María"
-                      className="px-3 py-2.5 text-sm border border-input bg-background rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground" />
+                    <input
+                      id="nombre"
+                      name="nombre"
+                      type="text"
+                      placeholder="María"
+                      value={formData.nombre}
+                      onChange={handleInputChange}
+                      className={`px-3 py-2.5 text-sm border rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground bg-background ${
+                        errors.nombre ? 'border-red-500' : 'border-input'
+                      }`}
+                    />
+                    {errors.nombre && <p className="text-xs text-red-500">{errors.nombre}</p>}
                   </div>
                   <div className="flex flex-col gap-1.5">
                     <label htmlFor="apellido" className="text-sm font-medium">Apellido</label>
-                    <input id="apellido" name="apellido" type="text" required placeholder="González"
-                      className="px-3 py-2.5 text-sm border border-input bg-background rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground" />
+                    <input
+                      id="apellido"
+                      name="apellido"
+                      type="text"
+                      placeholder="González"
+                      value={formData.apellido}
+                      onChange={handleInputChange}
+                      className={`px-3 py-2.5 text-sm border rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground bg-background ${
+                        errors.apellido ? 'border-red-500' : 'border-input'
+                      }`}
+                    />
+                    {errors.apellido && <p className="text-xs text-red-500">{errors.apellido}</p>}
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="email" className="text-sm font-medium">Correo electrónico</label>
-                  <input id="email" name="email" type="email" required placeholder="maria@correo.cl"
-                    className="px-3 py-2.5 text-sm border border-input bg-background rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground" />
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="maria@correo.cl"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className={`px-3 py-2.5 text-sm border rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground bg-background ${
+                      errors.email ? 'border-red-500' : 'border-input'
+                    }`}
+                  />
+                  {errors.email && <p className="text-xs text-red-500">{errors.email}</p>}
                 </div>
 
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="telefono" className="text-sm font-medium">Teléfono</label>
-                  <input id="telefono" name="telefono" type="tel" placeholder="+56 9 1234 5678"
-                    className="px-3 py-2.5 text-sm border border-input bg-background rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground" />
+                  <input
+                    id="telefono"
+                    name="telefono"
+                    type="tel"
+                    placeholder="+56 9 1234 5678"
+                    value={formData.telefono}
+                    onChange={handleInputChange}
+                    className="px-3 py-2.5 text-sm border border-input bg-background rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground"
+                  />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="direccion" className="text-sm font-medium">Dirección</label>
-                  <input id="direccion" name="direccion" type="text" required placeholder="Av. Providencia 1234, Depto 5"
-                    className="px-3 py-2.5 text-sm border border-input bg-background rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground" />
+                  <input
+                    id="direccion"
+                    name="direccion"
+                    type="text"
+                    placeholder="Av. Providencia 1234, Depto 5"
+                    value={formData.direccion}
+                    onChange={handleInputChange}
+                    className={`px-3 py-2.5 text-sm border rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground bg-background ${
+                      errors.direccion ? 'border-red-500' : 'border-input'
+                    }`}
+                  />
+                  {errors.direccion && <p className="text-xs text-red-500">{errors.direccion}</p>}
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5">
                     <label htmlFor="ciudad" className="text-sm font-medium">Ciudad</label>
-                    <input id="ciudad" name="ciudad" type="text" required placeholder="Santiago"
-                      className="px-3 py-2.5 text-sm border border-input bg-background rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground" />
+                    <input
+                      id="ciudad"
+                      name="ciudad"
+                      type="text"
+                      placeholder="Santiago"
+                      value={formData.ciudad}
+                      onChange={handleInputChange}
+                      className={`px-3 py-2.5 text-sm border rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground bg-background ${
+                        errors.ciudad ? 'border-red-500' : 'border-input'
+                      }`}
+                    />
+                    {errors.ciudad && <p className="text-xs text-red-500">{errors.ciudad}</p>}
                   </div>
                   <div className="flex flex-col gap-1.5">
                     <label htmlFor="region" className="text-sm font-medium">Región</label>
-                    <select id="region" name="region" required
-                      className="px-3 py-2.5 text-sm border border-input bg-background rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring text-foreground">
+                    <select
+                      id="region"
+                      name="region"
+                      value={formData.region}
+                      onChange={handleInputChange}
+                      className={`px-3 py-2.5 text-sm border rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring text-foreground bg-background ${
+                        errors.region ? 'border-red-500' : 'border-input'
+                      }`}
+                    >
                       <option value="">Seleccionar</option>
-                      <option>Región Metropolitana</option>
-                      <option>Valparaíso</option>
-                      <option>Biobío</option>
-                      <option>La Araucanía</option>
-                      <option>Los Lagos</option>
-                      <option>O&apos;Higgins</option>
-                      <option>Maule</option>
-                      <option>Antofagasta</option>
-                      <option>Tarapacá</option>
-                      <option>Atacama</option>
-                      <option>Coquimbo</option>
-                      <option>Los Ríos</option>
-                      <option>Arica y Parinacota</option>
-                      <option>Aysén</option>
-                      <option>Magallanes</option>
+                      <option value="Región Metropolitana">Región Metropolitana</option>
+                      <option value="Valparaíso">Valparaíso</option>
+                      <option value="Biobío">Biobío</option>
+                      <option value="La Araucanía">La Araucanía</option>
+                      <option value="Los Lagos">Los Lagos</option>
+                      <option value="O'Higgins">O&apos;Higgins</option>
+                      <option value="Maule">Maule</option>
+                      <option value="Antofagasta">Antofagasta</option>
+                      <option value="Tarapacá">Tarapacá</option>
+                      <option value="Atacama">Atacama</option>
+                      <option value="Coquimbo">Coquimbo</option>
+                      <option value="Los Ríos">Los Ríos</option>
+                      <option value="Arica y Parinacota">Arica y Parinacota</option>
+                      <option value="Aysén">Aysén</option>
+                      <option value="Magallanes">Magallanes</option>
                     </select>
+                    {errors.region && <p className="text-xs text-red-500">{errors.region}</p>}
                   </div>
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full py-3 mt-2 text-sm font-medium bg-primary text-primary-foreground hover:opacity-90 transition-opacity rounded-[var(--brand-radius)]"
+                  disabled={isSubmitting}
+                  className="w-full py-3 mt-2 text-sm font-medium bg-primary text-primary-foreground hover:opacity-90 disabled:opacity-50 transition-opacity rounded-[var(--brand-radius)]"
                 >
-                  Continuar al resumen
+                  {isSubmitting ? 'Procesando...' : 'Continuar al resumen'}
                 </button>
               </form>
             </section>
@@ -141,17 +289,17 @@ export default function CheckoutPage() {
               {/* Lista de items */}
               <div className="flex flex-col gap-4 mb-8">
                 {items.map((item) => (
-                  <div key={`${item.productId}-${item.variantId}`} className="flex gap-4 py-4 border-b border-border">
+                  <div key={item.variantId} className="flex gap-4 py-4 border-b border-border">
                     <div className="w-16 h-20 bg-muted rounded-[var(--brand-radius)] flex-shrink-0" />
                     <div className="flex-1 text-sm">
-                      <p className="font-medium">{item.title}</p>
-                      {item.variantTitle && (
-                        <p className="text-muted-foreground mt-0.5">{item.variantTitle}</p>
+                      <p className="font-medium">{item.product.title}</p>
+                      {item.variant.title && (
+                        <p className="text-muted-foreground mt-0.5">{item.variant.title}</p>
                       )}
                       <p className="text-muted-foreground mt-0.5">Cant. {item.quantity}</p>
                     </div>
                     <p className="text-sm font-medium tabular-nums">
-                      ${(item.price * item.quantity).toLocaleString('es-CL')}
+                      ${((item.variant.prices?.[0]?.amount ?? 0) * item.quantity).toLocaleString('es-CL')}
                     </p>
                   </div>
                 ))}
@@ -184,9 +332,9 @@ export default function CheckoutPage() {
             </div>
           </div>
 
-          {subtotal < 49990 && (
+          {subtotal < SHIPPING_CONFIG.FREE_SHIPPING_THRESHOLD && (
             <p className="text-xs text-muted-foreground mt-4">
-              Agrega ${(49990 - subtotal).toLocaleString('es-CL')} más para envío gratis.
+              Agrega ${(SHIPPING_CONFIG.FREE_SHIPPING_THRESHOLD - subtotal).toLocaleString('es-CL')} más para envío gratis.
             </p>
           )}
         </aside>
