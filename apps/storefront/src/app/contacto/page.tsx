@@ -1,6 +1,7 @@
-import PageHeader from '@/components/PageHeader'
+import type { Metadata } from 'next'
+import { PageHeader } from '@/components/PageHeader'
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Contacto | Preset',
   description: 'Ponte en contacto con nosotros.',
 }
@@ -57,9 +58,9 @@ export default function ContactoPage() {
                 id="nombre"
                 name="nombre"
                 type="text"
-                required
                 placeholder="Tu nombre"
-                className="w-full px-3 py-2.5 text-sm border border-input bg-background rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground"
+                required
+                className="w-full px-3 py-2.5 text-sm border border-input rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground bg-background"
               />
             </div>
 
@@ -71,9 +72,9 @@ export default function ContactoPage() {
                 id="email"
                 name="email"
                 type="email"
-                required
                 placeholder="tu@correo.cl"
-                className="w-full px-3 py-2.5 text-sm border border-input bg-background rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground"
+                required
+                className="w-full px-3 py-2.5 text-sm border border-input rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground bg-background"
               />
             </div>
 
@@ -84,10 +85,10 @@ export default function ContactoPage() {
               <textarea
                 id="mensaje"
                 name="mensaje"
-                required
                 rows={5}
                 placeholder="¿En qué podemos ayudarte?"
-                className="w-full px-3 py-2.5 text-sm border border-input bg-background rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground resize-none"
+                required
+                className="w-full px-3 py-2.5 text-sm border border-input rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground resize-none bg-background"
               />
             </div>
 
