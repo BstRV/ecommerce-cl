@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export interface BreadcrumbItem {
   label: string
   href?: string
@@ -12,9 +14,9 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
     <nav aria-label="Ruta de navegación">
       <ol className="flex items-center gap-1.5 text-xs text-muted-foreground list-none p-0 m-0">
         <li>
-          <a href="/" className="hover:text-foreground transition-colors">
+          <Link href="/" className="hover:text-foreground transition-colors">
             Inicio
-          </a>
+          </Link>
         </li>
 
         {items.map((item, i) => (

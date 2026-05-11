@@ -88,7 +88,7 @@ export default function NosotrosPage() {
           <div className="relative max-w-7xl mx-auto flex items-center justify-center gap-8">
             <div className="w-px h-24 bg-white/20" />
             <p className="font-display text-white text-center" style={{ fontSize: "clamp(1.5rem, 4vw, 3rem)" }}>
-              "La ropa más elegante es la que no necesita gritar."
+              &ldquo;La ropa más elegante es la que no necesita gritar.&rdquo;
             </p>
             <div className="w-px h-24 bg-white/20" />
           </div>

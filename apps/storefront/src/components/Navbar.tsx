@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Link from "next/link"
 import { useCart } from "@/lib/cart-store"
 import MobileMenu from "./MobileMenu"
 import ThemeToggle from "./ThemeToggle"
@@ -32,7 +33,7 @@ export function Navbar() {
     >
       <nav className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between gap-8">
         {/* Wordmark */}
-        <a
+        <Link
           href="/"
           className="flex items-center gap-2 shrink-0"
           aria-label="Inicio"
@@ -44,7 +45,7 @@ export function Navbar() {
           <span className="text-sm font-semibold tracking-widest uppercase text-foreground">
             Preset
           </span>
-        </a>
+        </Link>
 
         {/* Primary nav */}
         <ul className="hidden md:flex items-center gap-8 list-none m-0 p-0">

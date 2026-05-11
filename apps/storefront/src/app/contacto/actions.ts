@@ -8,8 +8,6 @@ const contactFormSchema = z.object({
   mensaje: z.string().min(10, 'El mensaje debe tener al menos 10 caracteres').max(1000, 'El mensaje no puede exceder 1000 caracteres'),
 })
 
-type ContactFormInput = z.infer<typeof contactFormSchema>
-
 export type ContactFormResult =
   | { success: true; error?: never }
   | { success: false; error: string }

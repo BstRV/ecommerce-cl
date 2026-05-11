@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 const FOOTER_COLS = [
   {
     title: "Tienda",
@@ -34,12 +36,12 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-2 md:grid-cols-4 gap-10">
         {/* Brand */}
         <div className="col-span-2 md:col-span-1">
-          <a href="/" className="flex items-center gap-2 mb-5" aria-label="Inicio">
+          <Link href="/" className="flex items-center gap-2 mb-5" aria-label="Inicio">
             <span className="block w-4 h-4 bg-foreground" aria-hidden="true" />
             <span className="text-sm font-semibold tracking-widest uppercase">
               Preset
             </span>
-          </a>
+          </Link>
           <p className="text-xs text-muted-foreground leading-relaxed">
             Moda atemporal.
             <br />
