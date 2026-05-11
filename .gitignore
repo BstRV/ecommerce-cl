@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+build/
+.next/
+.turbo/
+out/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Claude Code personal settings (never commit)
+.claude/settings.local.json
+
+# OS / editors
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/
+
+# Docker volumes (local only)
+postgres_data/
+redis_data/
+meilisearch_data/
+
+# Git worktrees (aislamiento de ramas)
+.worktrees/
+
+# Claude Code local settings
+.claude/

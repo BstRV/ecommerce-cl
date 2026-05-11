@@ -1,0 +1,19 @@
+{
+  "name": "@ecommerce-preset/assets",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./brand.config.ts",
+  "types": "./brand.config.ts",
+  "exports": {
+    ".": "./brand.config.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@ecommerce-preset/types": "*"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}

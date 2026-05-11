@@ -1,0 +1,105 @@
+/* Import design tokens first — they define all --brand-* custom properties */
+@import "../theme/tokens.css";
+
+/* Tailwind v4 — auto-detects content from app and transpiled packages */
+@import "tailwindcss";
+
+/* Also scan UI package components for class names */
+@source "../../node_modules/@ecommerce-preset/ui/src/**/*.{ts,tsx}";
+
+/**
+ * @theme inline — wires --brand-* tokens into Tailwind semantic color names.
+ *
+ * "inline" keeps the values as CSS variable references (not resolved at build
+ * time), so runtime theme changes (e.g. toggling .dark) propagate correctly.
+ *
+ * Result: bg-primary → background-color: rgb(var(--brand-primary))
+ *         text-foreground → color: rgb(var(--brand-foreground))  … etc.
+ */
+@theme inline {
+  /* Colors */
+  --color-background:         rgb(var(--brand-background));
+  --color-foreground:         rgb(var(--brand-foreground));
+
+  --color-primary:            rgb(var(--brand-primary));
+  --color-primary-foreground: rgb(var(--brand-primary-fg));
+
+  --color-secondary:            rgb(var(--brand-secondary));
+  --color-secondary-foreground: rgb(var(--brand-secondary-fg));
+
+  --color-muted:            rgb(var(--brand-muted));
+  --color-muted-foreground: rgb(var(--brand-muted-fg));
+
+  --color-accent:            rgb(var(--brand-accent));
+  --color-accent-foreground: rgb(var(--brand-accent-fg));
+
+  --color-border:      rgb(var(--brand-border));
+  --color-input:       rgb(var(--brand-input));
+  --color-ring:        rgb(var(--brand-ring));
+
+  --color-destructive:            rgb(var(--brand-destructive));
+  --color-destructive-foreground: rgb(var(--brand-destructive-fg));
+
+  /* Border radius */
+  --radius:    var(--brand-radius);
+  --radius-sm: calc(var(--brand-radius) - 2px);
+  --radius-md: var(--brand-radius);
+  --radius-lg: calc(var(--brand-radius) + 2px);
+  --radius-xl: calc(var(--brand-radius) + 4px);
+
+  /* Typography */
+  --font-sans:    var(--font-family-sans);
+  --font-display: var(--font-family-display);
+  --font-mono:    var(--font-family-mono);
+}
+
+/* ─── Keyframes ──────────────────────────────────────────────────────────────── */
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ─── Custom utilities ───────────────────────────────────────────────────────── */
+
+@utility animate-fade-up {
+  animation: fade-up 0.5s ease-out both;
+}
+
+@utility animate-fade-in {
+  animation: fade-in 0.4s ease-out both;
+}
+
+@utility animate-slide-in-right {
+  animation: slide-in-right 0.35s ease-out both;
+}
+
+/* ─── Base resets ────────────────────────────────────────────────────────────── */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    border-color: rgb(var(--brand-border));
+  }
+
+  html {
+    font-family: var(--font-family-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: rgb(var(--brand-background));
+    color: rgb(var(--brand-foreground));
+  }
+}

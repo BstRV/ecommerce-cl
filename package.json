@@ -1,0 +1,33 @@
+{
+  "name": "ecommerce-preset",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "npm@11.11.0",
+  "workspaces": {
+    "packages": [
+      "apps/*",
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/apps/backend",
+      "**/apps/backend/**",
+      "**/@medusajs/**",
+      "**/@mikro-orm/**",
+      "**/medusa-mikro-orm/**"
+    ]
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint"
+  },
+  "devDependencies": {
+    "turbo": "latest",
+    "typescript": "latest",
+    "eslint": "latest",
+    "prettier": "latest"
+  },
+  "overrides": {
+    "ajv": "^8.0.0"
+  }
+}
