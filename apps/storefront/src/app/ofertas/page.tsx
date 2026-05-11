@@ -39,14 +39,15 @@ export default async function OfertasPage({ searchParams }: Props) {
     <>
       <PageHeader
         title="Ofertas"
-        subtitle={`${products.length} productos`}
+        subtitle={`${products.length} productos en oferta`}
         breadcrumbs={[{ label: 'Inicio', href: '/' }, { label: 'Ofertas' }]}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         {/* Banner informativo de ofertas */}
-        <div className="mb-8 bg-muted p-4 rounded-lg border border-border">
-          <p className="text-sm text-muted-foreground">
+        <div className="mb-8 p-4 border border-border bg-secondary rounded-[var(--brand-radius)] flex items-center gap-3">
+          <div className="w-2 h-2 rounded-full bg-foreground flex-shrink-0" />
+          <p className="text-sm text-foreground">
             Precios especiales por tiempo limitado. No se requieren códigos de descuento.
           </p>
         </div>
@@ -56,7 +57,7 @@ export default async function OfertasPage({ searchParams }: Props) {
         {products.length === 0 ? (
           <EmptyState
             title="Sin ofertas disponibles"
-            description="Revisa más tarde, estamos actualizando los precios."
+            description="Vuelve pronto, agregamos nuevas ofertas regularmente."
             action={{ label: 'Ver todas las colecciones', href: '/colecciones' }}
           />
         ) : (
