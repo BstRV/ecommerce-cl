@@ -13,9 +13,12 @@
     "lint": "turbo run lint"
   },
   "devDependencies": {
-    "turbo": "latest",
-    "typescript": "latest",
     "eslint": "latest",
-    "prettier": "latest"
+    "prettier": "latest",
+    "turbo": "latest",
+    "typescript": "latest"
+  },
+  "dependencies": {
+    "zod": "^4.4.3"
   }
 }
