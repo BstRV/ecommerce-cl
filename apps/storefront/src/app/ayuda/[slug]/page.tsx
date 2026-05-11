@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation'
-import PageHeader from '@/components/PageHeader'
+import { PageHeader } from '@/components/PageHeader'
 import type { Metadata } from 'next'
 
 const HELP_CONTENT: Record<string, { title: string; subtitle: string; sections: { heading: string; body: string }[] }> = {
