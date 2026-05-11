@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This is a **white-label e-commerce monorepo** targeting the Chilean market, built on:
 - **Backend:** MedusaJS v2 (headless commerce)
 - **Frontend:** Next.js 15+ (App Router)
-- **Monorepo orchestration:** Turborepo + Yarn/npm workspaces
+- **Monorepo orchestration:** Turborepo + npm workspaces (backend standalone)
 
 ## Commands
 
@@ -33,11 +33,11 @@ docker-compose down
 ```
 
 Services exposed locally:
-- PostgreSQL 15 → `localhost:5432` (db: `medusa_db`, user/pass: `medusa/medusa`)
-- Redis → `localhost:6379`
+- PostgreSQL 15 → `localhost:5433` (db: `medusa_db`, user/pass: `medusa/medusa`)
+- Redis → `localhost:6380`
 - Meilisearch → `localhost:7700`
 
-Copy `.env.example` to `.env` and fill in values before starting development.
+Copy `.env.example` to `apps/backend/.env` before starting the backend. See `docs/local-dev.md` for the full setup guide.
 
 ## Repository Structure
 
@@ -102,7 +102,11 @@ Uses the App Router. Product search leverages Meilisearch directly from the clie
 | Variable | Purpose |
 |---|---|
 | `DATABASE_URL` | PostgreSQL connection string for MedusaJS |
+| `REDIS_URL` | Redis connection string |
+| `STORE_CORS` / `ADMIN_CORS` / `AUTH_CORS` | CORS origins (required by MedusaJS) |
+| `JWT_SECRET` / `COOKIE_SECRET` | Session secrets (required by MedusaJS) |
 | `MEDUSA_ADMIN_TOKEN` | Admin panel authentication |
+| `NEXT_PUBLIC_MEDUSA_URL` | Backend URL used by Next.js storefront |
 | `MP_ACCESS_TOKEN` / `MP_PUBLIC_KEY` | Mercado Pago payment gateway |
 | `SIMPLE_API_KEY` | SimpleAPI Chilean e-invoicing |
 | `GCP_BUCKET_NAME` | Google Cloud Storage for media |
