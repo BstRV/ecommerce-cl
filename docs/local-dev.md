@@ -26,8 +26,10 @@ npm install
 
 # Instalar dependencias del backend por separado
 # (el backend está fuera de npm workspaces para evitar hoisting de MedusaJS)
+# --legacy-peer-deps es necesario por un conflicto interno entre paquetes
+# de MedusaJS 2.14.2 (icons pide React 19, draft-order pide React 18)
 cd apps/backend
-npm install
+npm install --legacy-peer-deps
 cd ../..
 ```
 
@@ -162,7 +164,8 @@ test -f apps/backend/.env || cp .env.example apps/backend/.env
 npm install
 
 # Backend (aislado de workspaces)
-cd apps/backend && npm install && cd ../..
+# --legacy-peer-deps: conflicto interno MedusaJS 2.14.2 entre react@18/19
+cd apps/backend && npm install --legacy-peer-deps && cd ../..
 ```
 
 **Verificación**:
