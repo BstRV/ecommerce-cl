@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { useCart, type LocalCartItem } from "@/lib/cart-store"
 import { CartLineItem } from "@/components/cart/CartLineItem"
 import { EmptyState } from "@/components/EmptyState"
@@ -84,12 +85,12 @@ export default function CartPage() {
                 </div>
               </div>
 
-              <button
-                type="button"
-                className="mt-6 w-full bg-foreground text-background py-4 text-sm font-medium tracking-widest uppercase hover:bg-foreground/85 transition-colors"
+              <Link
+                href="/checkout"
+                className="mt-6 block w-full bg-foreground text-background py-4 text-center text-sm font-medium tracking-widest uppercase hover:bg-foreground/85 transition-colors"
               >
                 Continuar al pago
-              </button>
+              </Link>
 
               <a
                 href="/colecciones"
