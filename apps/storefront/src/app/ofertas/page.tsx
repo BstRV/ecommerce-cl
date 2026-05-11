@@ -1,8 +1,8 @@
 import { MOCK_PRODUCTS, CATEGORIES, filterByCategory } from '@/lib/mock-data'
-import PageHeader from '@/components/PageHeader'
-import FilterBar from '@/components/FilterBar'
-import ProductGrid from '@/components/ProductGrid'
-import EmptyState from '@/components/EmptyState'
+import { PageHeader } from '@/components/PageHeader'
+import { FilterBar } from '@/components/FilterBar'
+import { ProductGrid } from '@/components/ProductGrid'
+import { EmptyState } from '@/components/EmptyState'
 
 interface SearchParams {
   categoria?: string
@@ -14,7 +14,7 @@ interface Props {
 
 export const metadata = {
   title: 'Ofertas | Preset',
-  description: 'Los mejores precios de nuestra tienda.',
+  description: 'Productos con los mejores precios. Precios especiales por tiempo limitado.',
 }
 
 export default async function OfertasPage({ searchParams }: Props) {
@@ -39,15 +39,14 @@ export default async function OfertasPage({ searchParams }: Props) {
     <>
       <PageHeader
         title="Ofertas"
-        subtitle={`${products.length} productos en oferta`}
+        subtitle={`${products.length} productos`}
         breadcrumbs={[{ label: 'Inicio', href: '/' }, { label: 'Ofertas' }]}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         {/* Banner informativo de ofertas */}
-        <div className="mb-8 p-4 border border-border bg-secondary rounded-[var(--brand-radius)] flex items-center gap-3">
-          <div className="w-2 h-2 rounded-full bg-foreground flex-shrink-0" />
-          <p className="text-sm text-foreground">
+        <div className="mb-8 bg-muted p-4 rounded-lg border border-border">
+          <p className="text-sm text-muted-foreground">
             Precios especiales por tiempo limitado. No se requieren códigos de descuento.
           </p>
         </div>
@@ -57,7 +56,7 @@ export default async function OfertasPage({ searchParams }: Props) {
         {products.length === 0 ? (
           <EmptyState
             title="Sin ofertas disponibles"
-            description="Vuelve pronto, agregamos nuevas ofertas regularmente."
+            description="Revisa más tarde, estamos actualizando los precios."
             action={{ label: 'Ver todas las colecciones', href: '/colecciones' }}
           />
         ) : (
