@@ -4,7 +4,7 @@ import { PageHeader } from "@/components/PageHeader"
 import { FilterBar } from "@/components/FilterBar"
 import { ProductGrid } from "@/components/ProductGrid"
 import { EmptyState } from "@/components/EmptyState"
-import { MOCK_PRODUCTS, CATEGORIES, filterByCategory } from "@/lib/mock-data"
+import { medusa } from "@/lib/medusa"
 
 interface ColeccionesPageProps {
   searchParams: Promise<{ categoria?: string; sort?: string }>
@@ -15,7 +15,10 @@ export const metadata = { title: "Colecciones" }
 export default async function ColeccionesPage({ searchParams }: ColeccionesPageProps) {
   const { categoria, sort } = await searchParams
 
-  let products = filterByCategory(MOCK_PRODUCTS, categoria ?? null)
+  const categories = await medusa.getCategories()
+  const activeCategory = categories.find((c) => c.handle === categoria)
+
+  let products = await medusa.getProducts(undefined, activeCategory?.id)
 
   if (sort === "price-asc") {
     products = [...products].sort(
@@ -30,8 +33,6 @@ export default async function ColeccionesPage({ searchParams }: ColeccionesPageP
       (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     )
   }
-
-  const activeCategory = CATEGORIES.find((c) => c.handle === categoria)
 
   return (
     <>
@@ -48,7 +49,7 @@ export default async function ColeccionesPage({ searchParams }: ColeccionesPageP
         count={products.length}
       />
 
-      <FilterBar categories={CATEGORIES} />
+      <FilterBar categories={categories} />
 
       <main className="max-w-7xl mx-auto px-6 py-12">
         {products.length === 0 ? (

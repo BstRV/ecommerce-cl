@@ -1,125 +1,220 @@
 "use client"
 
-import {
+import React, {
   createContext,
   useContext,
-  useReducer,
+  useState,
+  useEffect,
   type ReactNode,
-  type Dispatch,
 } from "react"
-import type { Product, ProductVariant } from "@ecommerce-preset/types"
-
-// ─── Local cart item (richer than the API DTO in @ecommerce-preset/types) ─────
+import type { Product, ProductVariant, Price, Cart, CartItem } from "@ecommerce-preset/types"
+import { medusa, cookies } from "./medusa"
 
 export interface LocalCartItem {
-  /** variantId is the stable key */
   variantId: string
-  product: Product
-  variant: ProductVariant
-  quantity: number
-}
-
-// ─── State & Actions ──────────────────────────────────────────────────────────
-
-type CartState = {
-  items: LocalCartItem[]
-}
-
-type CartAction =
-  | { type: "ADD"; product: Product; variant: ProductVariant }
-  | { type: "REMOVE"; variantId: string }
-  | { type: "UPDATE_QTY"; variantId: string; quantity: number }
-  | { type: "CLEAR" }
-
-function cartReducer(state: CartState, action: CartAction): CartState {
-  switch (action.type) {
-    case "ADD": {
-      const existing = state.items.find((i) => i.variantId === action.variant.id)
-      if (existing) {
-        return {
-          items: state.items.map((i) =>
-            i.variantId === action.variant.id
-              ? { ...i, quantity: i.quantity + 1 }
-              : i
-          ),
-        }
-      }
-      return {
-        items: [
-          ...state.items,
-          { variantId: action.variant.id, product: action.product, variant: action.variant, quantity: 1 },
-        ],
-      }
-    }
-    case "REMOVE":
-      return { items: state.items.filter((i) => i.variantId !== action.variantId) }
-    case "UPDATE_QTY": {
-      if (action.quantity <= 0) {
-        return { items: state.items.filter((i) => i.variantId !== action.variantId) }
-      }
-      return {
-        items: state.items.map((i) =>
-          i.variantId === action.variantId ? { ...i, quantity: action.quantity } : i
-        ),
-      }
-    }
-    case "CLEAR":
-      return { items: [] }
-    default:
-      return state
+  product: {
+    title: string
+    thumbnail: string | null
   }
+  variant: {
+    id: string
+    title: string
+    inventoryQuantity?: number
+    prices: Price[]
+  }
+  quantity: number
+  lineItemId?: string
 }
-
-// ─── Context ──────────────────────────────────────────────────────────────────
 
 type CartContextValue = {
   items: LocalCartItem[]
-  dispatch: Dispatch<CartAction>
   itemCount: number
-  /** Subtotal in base currency units (CLP integer, USD cents) */
   subtotal: number
+  loading: boolean
+  addItem: (product: Product, variant: ProductVariant) => Promise<void>
+  removeItem: (variantId: string) => Promise<void>
+  updateQuantity: (variantId: string, quantity: number) => Promise<void>
+  clear: () => Promise<void>
+  refreshCart: () => Promise<void>
 }
 
 const CartContext = createContext<CartContextValue | null>(null)
 
-// ─── Provider ─────────────────────────────────────────────────────────────────
-
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(cartReducer, { items: [] })
+  const [items, setItems] = useState<LocalCartItem[]>([])
+  const [subtotal, setSubtotal] = useState<number>(0)
+  const [itemCount, setItemCount] = useState<number>(0)
+  const [cartId, setCartId] = useState<string | null>(null)
+  const [loading, setLoading] = useState<boolean>(true)
 
-  const itemCount = state.items.reduce((sum, i) => sum + i.quantity, 0)
-  const subtotal = state.items.reduce(
-    (sum, i) => sum + (i.variant.prices[0]?.amount ?? 0) * i.quantity,
-    0
-  )
+  // Map Medusa Cart items to LocalCartItem format
+  const mapCartToLocal = React.useCallback((medusaCart: Cart) => {
+    if (!medusaCart) return
+    const mapped: LocalCartItem[] = (medusaCart.items || []).map((item: CartItem) => ({
+      variantId: item.variantId,
+      product: {
+        title: item.title,
+        thumbnail: item.thumbnail,
+      },
+      variant: {
+        id: item.variantId,
+        title: item.title,
+        prices: [item.unitPrice],
+      },
+      quantity: item.quantity,
+      lineItemId: item.id,
+    }))
+    setItems(mapped)
+    setSubtotal(medusaCart.subtotal?.amount || 0)
+    setItemCount(medusaCart.itemCount || 0)
+  }, [])
+
+  const initCart = React.useCallback(async () => {
+    let activeCartId = cookies.get("medusa_cart_id")
+    let cart = null
+
+    try {
+      if (activeCartId) {
+        cart = await medusa.getCart(activeCartId)
+      }
+
+      if (!cart) {
+        cart = await medusa.createCart()
+        if (cart) {
+          activeCartId = cart.id
+          cookies.set("medusa_cart_id", cart.id)
+        }
+      }
+
+      if (cart) {
+        setCartId(cart.id)
+        mapCartToLocal(cart)
+      }
+    } catch (err) {
+      console.error("Error initializing cart:", err)
+    } finally {
+      setLoading(false)
+    }
+  }, [mapCartToLocal])
+
+  useEffect(() => {
+    let active = true
+    const runInit = async () => {
+      if (active) {
+        await initCart()
+      }
+    }
+    runInit()
+    return () => {
+      active = false
+    }
+  }, [initCart])
+
+  const refreshCart = async () => {
+    const activeCartId = cookies.get("medusa_cart_id")
+    if (activeCartId) {
+      const cart = await medusa.getCart(activeCartId)
+      if (cart) {
+        mapCartToLocal(cart)
+      }
+    }
+  }
+
+  const addItem = async (product: Product, variant: ProductVariant) => {
+    let activeCartId = cartId
+    if (!activeCartId) {
+      activeCartId = cookies.get("medusa_cart_id")
+    }
+    if (!activeCartId) return
+
+    setLoading(true)
+    const cart = await medusa.addItemToCart(activeCartId, variant.id, 1)
+    if (cart) {
+      mapCartToLocal(cart)
+      // Trigger internal analytics
+      try {
+        await medusa.trackEvent("add_to_cart", product.id, variant.id)
+      } catch (err) {
+        console.error("Error sending add_to_cart analytics:", err)
+      }
+    }
+    setLoading(false)
+  }
+
+  const removeItem = async (variantId: string) => {
+    const activeCartId = cartId || cookies.get("medusa_cart_id")
+    if (!activeCartId) return
+
+    const item = items.find((i) => i.variantId === variantId)
+    if (!item || !item.lineItemId) return
+
+    setLoading(true)
+    const cart = await medusa.removeCartItem(activeCartId, item.lineItemId)
+    if (cart) {
+      mapCartToLocal(cart)
+    }
+    setLoading(false)
+  }
+
+  const updateQuantity = async (variantId: string, quantity: number) => {
+    if (quantity <= 0) {
+      await removeItem(variantId)
+      return
+    }
+
+    const activeCartId = cartId || cookies.get("medusa_cart_id")
+    if (!activeCartId) return
+
+    const item = items.find((i) => i.variantId === variantId)
+    if (!item || !item.lineItemId) return
+
+    setLoading(true)
+    const cart = await medusa.updateCartItem(activeCartId, item.lineItemId, quantity)
+    if (cart) {
+      mapCartToLocal(cart)
+    }
+    setLoading(false)
+  }
+
+  const clear = async () => {
+    setLoading(true)
+    // Delete current cart cookie and create a new cart
+    cookies.delete("medusa_cart_id")
+    const cart = await medusa.createCart()
+    if (cart) {
+      setCartId(cart.id)
+      cookies.set("medusa_cart_id", cart.id)
+      mapCartToLocal(cart)
+    } else {
+      setItems([])
+      setSubtotal(0)
+      setItemCount(0)
+      setCartId(null)
+    }
+    setLoading(false)
+  }
 
   return (
-    <CartContext.Provider value={{ items: state.items, dispatch, itemCount, subtotal }}>
+    <CartContext.Provider
+      value={{
+        items,
+        itemCount,
+        subtotal,
+        loading,
+        addItem,
+        removeItem,
+        updateQuantity,
+        clear,
+        refreshCart,
+      }}
+    >
       {children}
     </CartContext.Provider>
   )
 }
 
-// ─── Hook ─────────────────────────────────────────────────────────────────────
-
-function useCartContext(): CartContextValue {
+export function useCart() {
   const ctx = useContext(CartContext)
   if (!ctx) throw new Error("useCart must be used within <CartProvider>")
   return ctx
-}
-
-export function useCart() {
-  const { items, dispatch, itemCount, subtotal } = useCartContext()
-
-  return {
-    items,
-    itemCount,
-    subtotal,
-    addItem: (product: Product, variant: ProductVariant) =>
-      dispatch({ type: "ADD", product, variant }),
-    removeItem: (variantId: string) => dispatch({ type: "REMOVE", variantId }),
-    updateQuantity: (variantId: string, quantity: number) =>
-      dispatch({ type: "UPDATE_QTY", variantId, quantity }),
-    clear: () => dispatch({ type: "CLEAR" }),
-  }
 }

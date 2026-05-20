@@ -4,7 +4,8 @@ import { Footer } from "@/components/Footer"
 import { Breadcrumb } from "@/components/Breadcrumb"
 import { ProductGrid } from "@/components/ProductGrid"
 import { AddToCartButton } from "@/components/cart/AddToCartButton"
-import { getProductByHandle, getRelatedProducts } from "@/lib/mock-data"
+import { ProductViewTracker } from "@/components/ProductViewTracker"
+import { medusa } from "@/lib/medusa"
 import { formatPrice } from "@ecommerce-preset/types"
 
 interface ProductPageProps {
@@ -13,16 +14,18 @@ interface ProductPageProps {
 
 export async function generateMetadata({ params }: ProductPageProps) {
   const { handle } = await params
-  const product = getProductByHandle(handle)
+  const product = await medusa.getProductByHandle(handle)
   return { title: product?.title ?? "Producto" }
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { handle } = await params
-  const product = getProductByHandle(handle)
+  const product = await medusa.getProductByHandle(handle)
   if (!product) notFound()
 
-  const related = getRelatedProducts(handle)
+  // Fetch products and filter out current product to display as related
+  const allProducts = await medusa.getProducts()
+  const related = allProducts.filter((p) => p.id !== product.id).slice(0, 4)
   const firstVariant = product.variants[0]
   const price = firstVariant?.prices[0]
   const category = product.categories[0]
@@ -30,6 +33,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   return (
     <>
       <Navbar />
+      <ProductViewTracker productId={product.id} />
 
       <main>
         {/* Breadcrumb */}

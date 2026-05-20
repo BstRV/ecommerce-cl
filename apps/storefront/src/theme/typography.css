@@ -1,0 +1,71 @@
+/**
+ * Typography & Motion Tokens
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Fuente única de verdad para todo lo relacionado con escala tipográfica,
+ * espaciado de letras, tamaños de rejillas decorativas y timings de animación.
+ *
+ * PARA RE-TEMATIZAR:
+ *   Edita los valores de este archivo. Todos los componentes que usen
+ *   var(--text-hero), var(--tracking-label), var(--grid-size-lg), etc.
+ *   se actualizarán automáticamente — no hay que tocar ningún componente.
+ *
+ * ESCALA FLUIDA (clamp):
+ *   clamp(MIN, PREFERIDO, MAX)
+ *   El valor PREFERIDO usa vw (viewport width) para que escale suavemente
+ *   entre breakpoints sin media queries.
+ */
+
+:root {
+  /* ── Tamaños de texto fluidos ────────────────────────────────────────────
+     Uso: style={{ fontSize: "var(--text-hero)" }}
+     O dentro de @utility para clases Tailwind personalizadas.
+  */
+  --text-hero:     clamp(3.5rem, 12vw, 10rem);  /* Título principal del Hero */
+  --text-section:  clamp(2.5rem, 6vw, 5rem);    /* Títulos grandes de sección */
+  --text-quote:    clamp(1.5rem, 4vw, 3rem);    /* Citas, lemas de marca */
+  --text-search:   clamp(2rem, 6vw, 5rem);      /* Input de búsqueda ampliado */
+
+  /* ── Letter-spacing de elementos recurrentes ─────────────────────────────
+     Los navegadores usan em relativo al font-size del elemento.
+  */
+  --tracking-overline: 0.3em;   /* Labels superiores de sección ("Colección 2025") */
+  --tracking-badge:    0.25em;  /* Labels secundarios ("Filosofía de marca") */
+  --tracking-button:   0.12em;  /* Botones con text-transform: uppercase */
+  --tracking-wordmark: 0.25em;  /* Logo / wordmark de la marca */
+
+  /* ── Rejillas decorativas de fondo ───────────────────────────────────────
+     Tamaños de backgroundSize para los patrones de cuadrícula.
+     Uso: style={{ backgroundSize: "var(--grid-size-lg) var(--grid-size-lg)" }}
+  */
+  --grid-size-lg: 60px;   /* Hero y secciones de corte principales */
+  --grid-size-md: 48px;   /* Secciones intermedias (Nosotros, break sections) */
+  --grid-size-sm: 24px;   /* Páginas de formulario (Login, Registro) */
+  --grid-size-xs: 16px;   /* Thumbnails y elementos pequeños (carrito) */
+
+  /* ── Opacidades de fondos decorativos ────────────────────────────────────
+     Uso: style={{ opacity: "var(--grid-opacity-hero)" }}
+     O directamente en clases Tailwind: opacity-[var(--grid-opacity-hero)]
+  */
+  --grid-opacity-hero:  0.04;   /* Rejilla del Hero (muy sutil) */
+  --grid-opacity-break: 0.05;   /* Rejilla de secciones de corte */
+  --grid-opacity-form:  0.02;   /* Rejilla de páginas de formulario (mínima) */
+
+  /* ── Duraciones de transición y animación ────────────────────────────────
+     Centraliza todos los duration-* de Tailwind que se usan en la app.
+     Uso directo en style={{ transition: `opacity var(--duration-base)` }}
+     o como valor en utilities.css.
+  */
+  --duration-fast:   150ms;   /* Hover de links, color de iconos */
+  --duration-base:   300ms;   /* Transiciones de color, backgrounds */
+  --duration-slow:   500ms;   /* Animaciones de entrada (fade-up) */
+  --duration-image:  700ms;   /* Zoom de imagen en hover (ProductCard scale) */
+  --duration-panel:  350ms;   /* Panels deslizantes (MobileMenu slide-in) */
+
+  /* ── Stagger (delay escalonado) para animaciones en grupo ────────────────
+     Uso: style={{ animationDelay: `${i * parseInt(getComputedStyle...)}ms` }}
+     O para valores fijos predecibles: animationDelay: "var(--stagger-section)"
+  */
+  --stagger-grid:    45ms;    /* Tarjetas de producto en ProductGrid */
+  --stagger-list:    80ms;    /* Listas (Values en Nosotros) */
+  --stagger-section: 120ms;   /* Secciones de texto (Nosotros manifesto) */
+}

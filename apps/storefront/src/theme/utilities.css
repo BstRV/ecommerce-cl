@@ -1,0 +1,278 @@
+/**
+ * Design Utilities — Patrones visuales reutilizables
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Clases @utility de Tailwind v4 que encapsulan los patrones de diseño que
+ * se repiten en toda la aplicación.
+ *
+ * PARA RE-TEMATIZAR:
+ *   Edita este archivo para cambiar el estilo de botones, inputs, labels,
+ *   efectos de fondo y chips de filtro en UN SOLO LUGAR.
+ *   Todos los componentes que usen btn-primary, form-input, chip, etc.
+ *   se actualizarán automáticamente.
+ *
+ * FILOSOFÍA:
+ *   Cada @utility lee las variables de tokens.css y typography.css,
+ *   nunca valores hardcodeados, para que el re-theming sea completo.
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BOTONES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/**
+ * btn-primary — Botón de acción principal (negro/blanco, invertido en dark mode)
+ * Uso: className="btn-primary"
+ * Aplicado en: botón de checkout, añadir al carrito, suscribirse, CTAs
+ */
+@utility btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background-color: rgb(var(--brand-primary));
+  color: rgb(var(--brand-primary-fg));
+  padding-inline: 1.5rem;
+  padding-block: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: var(--tracking-button, 0.12em);
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color var(--duration-base, 300ms),
+              transform     var(--duration-fast, 150ms);
+  cursor: pointer;
+  border: none;
+  &:hover:not(:disabled)  { background-color: rgb(var(--brand-primary) / 0.88); }
+  &:active:not(:disabled) { transform: scale(0.99); }
+  &:disabled              { opacity: 0.5; pointer-events: none; }
+}
+
+/**
+ * btn-primary-lg — Variante más grande del botón primario
+ * Uso: className="btn-primary btn-primary-lg"
+ */
+@utility btn-primary-lg {
+  padding-inline: 2rem;
+  padding-block: 1rem;
+}
+
+/**
+ * btn-outline — Botón secundario con borde
+ * Uso: className="btn-outline"
+ * Aplicado en: acciones secundarias, botón de Google OAuth
+ */
+@utility btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  border: 1px solid rgb(var(--brand-border));
+  background-color: transparent;
+  color: rgb(var(--brand-foreground));
+  padding-inline: 1rem;
+  padding-block: 0.625rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color var(--duration-base, 300ms),
+              border-color     var(--duration-base, 300ms);
+  cursor: pointer;
+  &:hover { background-color: rgb(var(--brand-secondary)); }
+}
+
+/**
+ * btn-ghost — Botón transparente solo con texto
+ * Uso: className="btn-ghost"
+ * Aplicado en: "Vaciar carrito", links de acción secundaria
+ */
+@utility btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: transparent;
+  border: none;
+  color: rgb(var(--brand-muted-fg));
+  font-size: 0.875rem;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color var(--duration-base, 300ms);
+  &:hover { color: rgb(var(--brand-foreground)); }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FORMULARIOS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/**
+ * form-input — Campo de texto estándar de la tienda
+ * Uso: className="form-input"
+ * Aplicado en: login, registro, checkout, newsletter, búsqueda
+ */
+@utility form-input {
+  width: 100%;
+  padding-inline: 0.75rem;
+  padding-block: 0.625rem;
+  font-size: 0.875rem;
+  border: 1px solid rgb(var(--brand-border));
+  background-color: rgb(var(--brand-background));
+  color: rgb(var(--brand-foreground));
+  outline: none;
+  border-radius: 0;                                          /* Estilo cuadrado — cambiar --brand-radius para redondear */
+  transition: box-shadow var(--duration-fast, 150ms);
+  &::placeholder { color: rgb(var(--brand-muted-fg)); }
+  &:focus        { box-shadow: 0 0 0 1px rgb(var(--brand-ring)); }
+  &:disabled     { opacity: 0.5; cursor: not-allowed; }
+}
+
+/**
+ * form-input-error — Variante de error para form-input
+ * Uso: className="form-input form-input-error"
+ */
+@utility form-input-error {
+  border-color: rgb(var(--brand-destructive));
+}
+
+/**
+ * form-label — Etiqueta de campo de formulario
+ * Uso: className="form-label"
+ */
+@utility form-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgb(var(--brand-muted-fg));
+  margin-bottom: 0.375rem;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TIPOGRAFÍA DE SECCIÓN
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/**
+ * section-label — Label superior de sección (overline)
+ * Uso: className="section-label"
+ * Aplicado en: "Colección 2025", "Filosofía de marca", "Acceso anticipado"
+ */
+@utility section-label {
+  font-size: 0.75rem;
+  letter-spacing: var(--tracking-overline, 0.3em);
+  text-transform: uppercase;
+  color: rgb(var(--brand-muted-fg));
+}
+
+/**
+ * link-underline — Link con subrayado de marca
+ * Uso: className="link-underline"
+ * Aplicado en: "Conoce nuestra historia →", "hola@preset.cl →"
+ */
+@utility link-underline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgb(var(--brand-foreground));
+  border-bottom: 1px solid rgb(var(--brand-foreground));
+  padding-bottom: 2px;
+  text-decoration: none;
+  transition: border-color var(--duration-base, 300ms),
+              color         var(--duration-base, 300ms);
+  &:hover {
+    border-color: rgb(var(--brand-muted-fg));
+    color: rgb(var(--brand-muted-fg));
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FONDOS DECORATIVOS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/**
+ * bg-grid — Rejilla decorativa usando el color de primer plano (foreground)
+ * Uso: className="bg-grid" + style={{ backgroundSize: "var(--grid-size-lg) ..." }}
+ * Aplicado en: Hero, secciones de corte (Nosotros)
+ */
+@utility bg-grid {
+  background-image:
+    linear-gradient(rgb(var(--brand-foreground)) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--brand-foreground)) 1px, transparent 1px);
+}
+
+/**
+ * bg-grid-border — Rejilla decorativa usando el color de borde (más sutil)
+ * Uso: className="bg-grid-border" + style={{ backgroundSize: "var(--grid-size-xs) ..." }}
+ * Aplicado en: placeholders de tarjetas, thumbnails del carrito
+ */
+@utility bg-grid-border {
+  background-image:
+    linear-gradient(rgb(var(--brand-border)) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--brand-border)) 1px, transparent 1px);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   EFECTOS DE SUPERFICIE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/**
+ * surface-blur — Efecto "frosted glass" sobre el fondo
+ * Uso: className="surface-blur"
+ * Aplicado en: Navbar al hacer scroll, FilterBar sticky, panel del móvil
+ */
+@utility surface-blur {
+  background-color: rgb(var(--brand-background) / 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CHIPS DE FILTRO
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/**
+ * chip — Chip de filtro inactivo
+ * Uso: className="chip"
+ * Aplicado en: FilterBar (categorías y ordenamiento)
+ */
+@utility chip {
+  display: inline-flex;
+  align-items: center;
+  padding-inline: 0.75rem;
+  padding-block: 0.375rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  border: 1px solid rgb(var(--brand-border));
+  color: rgb(var(--brand-muted-fg));
+  white-space: nowrap;
+  cursor: pointer;
+  background: transparent;
+  transition: border-color var(--duration-base, 300ms),
+              color         var(--duration-base, 300ms);
+  &:hover {
+    border-color: rgb(var(--brand-foreground));
+    color: rgb(var(--brand-foreground));
+  }
+}
+
+/**
+ * chip-active — Estado activo del chip
+ * Uso: className={active ? "chip chip-active" : "chip"}
+ */
+@utility chip-active {
+  background-color: rgb(var(--brand-foreground));
+  color: rgb(var(--brand-background));
+  border-color: rgb(var(--brand-foreground));
+  &:hover {
+    background-color: rgb(var(--brand-foreground) / 0.88);
+    color: rgb(var(--brand-background));
+    border-color: rgb(var(--brand-foreground));
+  }
+}

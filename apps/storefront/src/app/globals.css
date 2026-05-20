@@ -1,5 +1,14 @@
-/* Import design tokens first — they define all --brand-* custom properties */
+/* ─── Design System — importar en este orden ─────────────────────────────────
+   1. tokens.css     → variables CSS de colores, radios, layout y tipografías
+   2. typography.css → escala de texto fluida, tracking, grid sizes, timings
+   3. utilities.css  → @utility reutilizables: botones, inputs, chips, fondos
+   ─────────────────────────────────────────────────────────────────────────────
+   Para re-tematizar la tienda: editar solo esos 3 archivos en src/theme/.
+   Ningún componente ni página necesita cambios de estilos directamente.
+*/
 @import "../theme/tokens.css";
+@import "../theme/typography.css";
+@import "../theme/utilities.css";
 
 /* Tailwind v4 — auto-detects content from app and transpiled packages */
 @import "tailwindcss";

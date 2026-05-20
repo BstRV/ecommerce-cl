@@ -74,23 +74,23 @@ export default function NosotrosPage() {
         </section>
 
         {/* Geometric break */}
-        <div className="relative overflow-hidden bg-foreground py-24 px-6" aria-hidden="true">
+        <div className="relative overflow-hidden bg-background border-y border-border py-24 px-6" aria-hidden="true">
           <div
             className="absolute inset-0 opacity-[0.05]"
             style={{
               backgroundImage: `
-                linear-gradient(#fff 1px, transparent 1px),
-                linear-gradient(90deg, #fff 1px, transparent 1px)
+                linear-gradient(rgb(var(--brand-foreground)) 1px, transparent 1px),
+                linear-gradient(90deg, rgb(var(--brand-foreground)) 1px, transparent 1px)
               `,
               backgroundSize: "48px 48px",
             }}
           />
           <div className="relative max-w-7xl mx-auto flex items-center justify-center gap-8">
-            <div className="w-px h-24 bg-white/20" />
-            <p className="font-display text-white text-center" style={{ fontSize: "clamp(1.5rem, 4vw, 3rem)" }}>
+            <div className="w-px h-24 bg-foreground/20" />
+            <p className="font-display text-foreground text-center" style={{ fontSize: "clamp(1.5rem, 4vw, 3rem)" }}>
               &ldquo;La ropa más elegante es la que no necesita gritar.&rdquo;
             </p>
-            <div className="w-px h-24 bg-white/20" />
+            <div className="w-px h-24 bg-foreground/20" />
           </div>
         </div>
 

@@ -3,7 +3,7 @@ import { Footer } from "@/components/Footer"
 import { ProductGrid } from "@/components/ProductGrid"
 import { EmptyState } from "@/components/EmptyState"
 import { SearchInput } from "@/components/SearchInput"
-import { searchProducts, MOCK_PRODUCTS } from "@/lib/mock-data"
+import { medusa } from "@/lib/medusa"
 
 interface BuscarPageProps {
   searchParams: Promise<{ q?: string }>
@@ -14,7 +14,7 @@ export const metadata = { title: "Buscar" }
 export default async function BuscarPage({ searchParams }: BuscarPageProps) {
   const { q } = await searchParams
   const query = q?.trim() ?? ""
-  const results = query ? searchProducts(MOCK_PRODUCTS, query) : []
+  const results = query ? await medusa.search(query) : []
 
   return (
     <>

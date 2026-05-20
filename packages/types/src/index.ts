@@ -138,4 +138,18 @@ export interface Customer {
   lastName: string | null
   phone: string | null
   addresses: Address[]
+  metadata?: Record<string, unknown>
 }
+
+// ─── Order ────────────────────────────────────────────────────────────────────
+
+export interface Order {
+  id: string
+  display_id?: number
+  created_at: string
+  status: string
+  total: number
+  currency_code: string
+  metadata?: Record<string, unknown>
+}
+

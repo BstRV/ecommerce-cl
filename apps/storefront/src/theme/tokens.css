@@ -53,6 +53,18 @@
   --font-family-sans:    var(--font-geist-sans),    'Geist',          system-ui, sans-serif;
   --font-family-display: var(--font-dm-display),    'DM Serif Display', Georgia, serif;
   --font-family-mono:    var(--font-geist-mono),    'Geist Mono',     monospace;
+
+  /* ── Layout & Spacing ───────────────────────────────────────────────────
+     Valores de maquetación usados de forma recurrente.
+     Cambiar --layout-max-width actualiza el ancho máximo de toda la app.
+     Cambiar --layout-px actualiza el padding horizontal de secciones.
+  */
+  --layout-max-width: 80rem;    /* max-w-7xl equivalente */
+  --layout-px:        1.5rem;   /* px-6 equivalente */
+  --section-py-sm:    3rem;     /* py-12 — secciones compactas */
+  --section-py-md:    6rem;     /* py-24 — secciones estándar */
+  --section-py-lg:    8rem;     /* py-32 — secciones grandes (PageHeader) */
+  --navbar-height:    4rem;     /* h-16 — altura de la barra de navegación */
 }
 
 /* ─── Dark mode ─────────────────────────────────────────────────────────────── */

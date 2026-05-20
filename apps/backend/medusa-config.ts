@@ -23,6 +23,28 @@ module.exports = defineConfig({
       resolve: './src/modules/analytics',
       key: ANALYTICS_MODULE,
     },
+    // ── Módulo de Autenticación Híbrida ──────────────────────────────────────
+    {
+      resolve: "@medusajs/medusa/auth",
+      options: {
+        providers: [
+          {
+            resolve: "@medusajs/medusa/auth-emailpass",
+            id: "emailpass",
+          },
+          {
+            resolve: "@medusajs/medusa/auth-google",
+            id: "google",
+            options: {
+              clientId: process.env.GOOGLE_CLIENT_ID,
+              clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+              callbackUrl: process.env.GOOGLE_CALLBACK_URL || "http://localhost:9000/auth/google/callback",
+              successRedirectUrl: process.env.GOOGLE_SUCCESS_REDIRECT || "http://localhost:3000/cuenta",
+            },
+          },
+        ],
+      },
+    },
   ],
 })
 

@@ -23,7 +23,7 @@ export default function MobileMenu() {
         onClick={() => setOpen(!open)}
         aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
         aria-expanded={open}
-        className="flex flex-col justify-center items-center w-8 h-8 gap-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
+        className="flex flex-col justify-center items-center w-8 h-8 gap-1.5 bg-transparent border-0 p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
       >
         <span
           className={`block h-px w-6 bg-foreground transition-transform duration-300 origin-center ${

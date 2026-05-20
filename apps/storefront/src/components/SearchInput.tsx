@@ -38,11 +38,11 @@ export function SearchInput({ initialQuery = "" }: SearchInputProps) {
         onChange={(e) => setValue(e.target.value)}
         placeholder="Buscar…"
         className="flex-1 bg-transparent border-0 outline-none font-display text-foreground placeholder:text-muted-foreground/40"
-        style={{ fontSize: "clamp(2rem, 6vw, 5rem)", lineHeight: 1 }}
+        style={{ fontSize: "var(--text-search)", lineHeight: 1 }}
       />
       <button
         type="submit"
-        className="shrink-0 mb-2 text-sm text-muted-foreground hover:text-foreground transition-colors tracking-widest uppercase"
+        className="btn-ghost shrink-0 mb-2 tracking-widest uppercase"
       >
         Buscar →
       </button>
