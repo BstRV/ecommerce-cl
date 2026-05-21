@@ -10,6 +10,7 @@ const NAV_LINKS = [
   { href: '/ofertas',     label: 'Ofertas'     },
   { href: '/nosotros',    label: 'Nosotros'    },
   { href: '/contacto',    label: 'Contacto'    },
+  { href: '/faq',         label: 'Preguntas Frecuentes' },
 ]
 
 export default function MobileMenu() {

@@ -58,82 +58,67 @@ npm run dev
 
 ---
 
-## Arquitectura del Sistema de Temas
+## Arquitectura del Sistema de Temas (Abstracción Visual en 3 Capas)
 
-El sistema sigue un flujo unidireccional de tres capas:
+El sistema de temas y estilos de la web está completamente desacoplado y estructurado en tres archivos especializados dentro de `apps/storefront/src/theme/`, los cuales son importados en orden por `globals.css`:
 
 ```
-tokens.css          →  globals.css         →  Componentes
-(--brand-* vars)       (@theme inline)        (clases Tailwind)
+              ┌──> tokens.css      (Colores, radios y dimensiones de layout)
+globals.css ──┼──> typography.css  (Tamaños fluidos, tracking, animaciones y decoración de rejilla)
+              └──> utilities.css   (Clases @utility de Tailwind v4: botones, inputs, etc.)
 ```
 
-### Capa 1 — `apps/storefront/src/theme/tokens.css`
-
-Define **todos** los valores visuales como custom properties CSS con prefijo `--brand-*`.
-Los valores son tripletes RGB (`R G B`) para permitir composición con opacidad.
+### 1. Capa de Tokens (`apps/storefront/src/theme/tokens.css`)
+Define los valores de diseño básicos como propiedades personalizadas CSS (`--brand-*` y `--layout-*`).
+* **Colores en formato RGB:** Los colores se guardan como tripletes RGB (`R G B` sin comas) para permitir la composición de opacidad en Tailwind (ej. `bg-primary/80`).
+* **Variables de layout:** Centraliza dimensiones estructurales como `--layout-max-width`, `--layout-px`, paddings de secciones (`--section-py-*`) y la altura de navegación (`--navbar-height`).
 
 ```css
 :root {
-  --brand-primary:    9   9  11;   /* cerca de negro */
-  --brand-primary-fg: 250 250 250; /* blanco para contraste */
-  --brand-radius:     0.375rem;
+  --brand-primary: 9 9 11;       /* Cerca de negro */
+  --brand-primary-fg: 250 250 250; /* Blanco */
+  --layout-max-width: 80rem;     /* 1280px */
+  --navbar-height: 4.5rem;       /* 72px */
 }
 ```
 
-**Este es el único archivo que se modifica para cambiar el tema completo.**
+### 2. Capa de Tipografía y Efectos (`apps/storefront/src/theme/typography.css`)
+Controla la personalidad de los textos, comportamientos visuales dinámicos y detalles ornamentales:
+* **Escala tipográfica fluida:** Variables como `--text-hero`, `--text-quote` y `--text-search`.
+* **Animaciones y tiempos:** Controladores para duraciones y delays escalonados (`--duration-*`, `--stagger-*`).
+* **Rejillas y guías decorativas:** Configuración para el tamaño de las celdas y opacidad de los fondos geométricos en cuadrícula (`--grid-size-*`, `--grid-opacity-*`).
 
-### Capa 2 — `apps/storefront/src/app/globals.css`
-
-Conecta los tokens de la Capa 1 con el sistema de colores semánticos de Tailwind v4
-mediante la directiva `@theme inline`:
-
-```css
-@theme inline {
-  --color-primary:            rgb(var(--brand-primary));
-  --color-primary-foreground: rgb(var(--brand-primary-fg));
-  /* … */
-}
-```
-
-`inline` preserva las referencias a variables CSS (no resuelve en build time),
-permitiendo que el cambio a `.dark` funcione en runtime.
-
-### Capa 3 — Componentes
-
-Usan exclusivamente clases semánticas de Tailwind. Nunca valores hardcodeados.
-
-```tsx
-// ✅ Correcto
-<button className="bg-primary text-primary-foreground hover:bg-primary/90">
-
-// ❌ Incorrecto
-<button style={{ backgroundColor: "#000" }}>
-<button className="bg-[rgb(9,9,11)]">
-```
+### 3. Capa de Utilidades Visuales (`apps/storefront/src/theme/utilities.css`)
+Implementa las directivas `@utility` personalizadas de Tailwind v4. Esto evita duplicar combinaciones complejas de clases en los componentes y mantiene los elementos UI perfectamente estandarizados:
+* **Componentes de UI abstractos:** `btn-primary`, `btn-outline`, `btn-ghost`, `btn-primary-lg`.
+* **Formularios estandarizados:** `form-input`, `form-input-error`, `form-label`.
+* **Estilos y efectos de layout:** `bg-grid`, `bg-grid-border`, `surface-blur`, `chip`, `chip-active`.
 
 ---
 
 ## Cómo Re-Tematizar
 
-Para cambiar el tema a, por ejemplo, un azul marino y crema:
+Para cambiar la identidad visual de la tienda para un nuevo cliente, se sigue este flujo en orden secuencial sin modificar la lógica de negocio ni tocar componentes individuales:
 
-**Solo editar `apps/storefront/src/theme/tokens.css`:**
+1. **Colores base:** Modificar los colores en `apps/storefront/src/theme/tokens.css` (en `:root` para modo claro y `.dark` para modo oscuro). Los valores deben ser tripletes RGB.
+2. **Registro de marca:** Reflejar los mismos colores y especificaciones en `packages/assets/brand.config.ts` para mantener la documentación y metadatos sincronizados.
+3. **Fuentes tipográficas:**
+   * Cambiar las importaciones de Google Fonts en `apps/storefront/src/app/layout.tsx`.
+   * Asignar las variables tipográficas correspondientes en `tokens.css` (ej. `--font-family-display`, `--font-family-sans`).
+4. **Radios y espaciados:** Ajustar `--brand-radius` y dimensiones de layout en `tokens.css`.
+5. **Tipografías fluidas y tiempos:** Ajustar tamaños dinámicos en `typography.css` si el nuevo diseño lo requiere.
+6. **Efectos de utilidades:** Modificar la forma, efectos de transición o estilos interactivos en `utilities.css`.
 
-```css
-:root {
-  --brand-background:    252 249 242;  /* crema */
-  --brand-foreground:     13  27  42;  /* azul marino oscuro */
-  --brand-primary:        13  27  42;
-  --brand-primary-fg:    252 249 242;
-  --brand-secondary:     229 235 241;
-  /* … resto de tokens … */
-}
-```
+De esta forma, la tienda puede adoptar una imagen corporativa radicalmente diferente en minutos.
 
-Y actualizar `packages/assets/brand.config.ts` con los mismos valores para mantener
-el registro centralizado de la identidad de marca.
+---
 
-No se necesita modificar ningún componente.
+## Prevención de FOUC (Flash of Unstyled Content) y Persistencia de Tema
+
+El modo claro/oscuro está estandarizado y es consistente en todo el sitio gracias a un flujo de persistencia en dos partes:
+
+1. **Hydration-Safe Inline Script:** En `apps/storefront/src/app/layout.tsx`, un script síncrono e inmediato insertado dentro del `<head>` lee `localStorage.getItem('theme')` o consulta la preferencia del sistema (`prefers-color-scheme: dark`) para inyectar la clase `.dark` en el `document.documentElement` antes de que se dibuje cualquier elemento o se hidrate React. Esto elimina por completo el parpadeo blanco indeseado al cargar la página en modo oscuro.
+2. **SSR-Safe ThemeToggle:** El componente `ThemeToggle` espera a que el frontend se monte (`useEffect`) antes de leer el estado del DOM y cambiar la clase, evitando inconsistencias entre el HTML generado por el servidor y el cliente.
 
 ---
 

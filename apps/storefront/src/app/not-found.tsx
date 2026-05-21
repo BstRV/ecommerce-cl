@@ -19,13 +19,13 @@ export default function NotFound() {
       <div className="flex flex-col sm:flex-row gap-3">
         <Link
           href="/"
-          className="px-6 py-2.5 text-sm font-medium bg-primary text-primary-foreground hover:opacity-90 transition-opacity rounded-[var(--brand-radius)]"
+          className="btn-primary"
         >
           Ir al inicio
         </Link>
         <Link
           href="/colecciones"
-          className="px-6 py-2.5 text-sm font-medium border border-border hover:bg-muted transition-colors rounded-[var(--brand-radius)]"
+          className="btn-outline"
         >
           Ver colecciones
         </Link>

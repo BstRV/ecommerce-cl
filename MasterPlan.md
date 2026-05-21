@@ -73,9 +73,13 @@ Para cumplir con los estándares de robustez solicitados, la aplicación se rige
 * **Variables de Entorno:** Configuración de `.env` estructurado en storefront y backend.
 
 ### 1.2 Abstracción Visual y Tematizado (White-Label Strategy)
-* **Neutral Design:** Implementar el sistema basado en **CSS Variables** (Tailwind v4) usando una escala de grises estricta en `tokens.css`.
-* **Brand Config:** `brand.config.ts` como punto único de control de fuentes, logos y colores.
-* **UI Library:** Componentes neutros reutilizables en `packages/ui`.
+* **Neutral Design (Arquitectura de 3 Capas CSS):** Implementación de una estructura robusta en `apps/storefront/src/theme/` para desacoplar completamente la presentación visual:
+  * `tokens.css` → Fuente de verdad en tiempo de ejecución para colores base (en formato de triplete RGB), radios y espaciado de layout (`--layout-*`, `--navbar-height`, `--section-py-*`).
+  * `typography.css` → Parámetros de tipografía fluida (`--text-hero`, `--text-quote`), espaciado entre letras (`tracking`), animaciones y controladores decorativos de cuadrículas.
+  * `utilities.css` → Directivas `@utility` personalizadas de Tailwind v4 (`btn-primary`, `btn-outline`, `btn-ghost`, `form-input`, `bg-grid`, `surface-blur`, etc.) para estandarizar los patrones de estilo recurrentes de forma abstracta en toda la aplicación.
+* **Brand Config:** `packages/assets/brand.config.ts` como punto conceptual y descriptivo de la identidad de la marca (logos, fuentes, escala de colores).
+* **UI Library:** Componentes neutros reutilizables en `packages/ui` que no contienen estilos embebidos ni clases Tailwind rígidas, permitiendo heredar los estilos del consumidor en globals.
+* **Persistencia y Prevención de FOUC:** Integración de un script síncrono en `<head>` de `layout.tsx` para inyectar `.dark` en el DOM antes de la renderización del navegador y del ciclo de vida de React, previniendo el molesto destello blanco.
 
 ### 1.3 Desarrollo del Backend (MedusaJS Core)
 * **Modelos de Datos y Catálogo:** Cargar el seed de datos iniciales en la base de datos local con categorías, productos y variantes (Marca, Talla, Color).

@@ -81,17 +81,8 @@ function GeometricPlaceholder({ index = 0 }: { index?: number }) {
       className="absolute inset-0 flex items-center justify-center overflow-hidden"
       aria-hidden="true"
     >
-      {/* Shared grid background */}
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgb(var(--brand-border)) 1px, transparent 1px),
-            linear-gradient(90deg, rgb(var(--brand-border)) 1px, transparent 1px)
-          `,
-          backgroundSize: variant % 2 === 0 ? "40px 40px" : "32px 32px",
-        }}
-      />
+      {/* Shared grid background — bg-grid-thumbnail de utilities.css */}
+      <div className="bg-grid-thumbnail absolute inset-0" />
 
       {/* Variant-specific motif */}
       <div className="relative">

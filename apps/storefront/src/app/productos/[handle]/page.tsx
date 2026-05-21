@@ -60,15 +60,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
               />
             ) : (
               <div
-                className="absolute inset-0"
+                className="absolute inset-0 bg-grid-placeholder"
                 aria-hidden="true"
-                style={{
-                  backgroundImage: `
-                    linear-gradient(rgb(var(--brand-border)) 1px, transparent 1px),
-                    linear-gradient(90deg, rgb(var(--brand-border)) 1px, transparent 1px)
-                  `,
-                  backgroundSize: "40px 40px",
-                }}
               >
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="w-16 h-16 border border-muted-foreground/20 rotate-45" />

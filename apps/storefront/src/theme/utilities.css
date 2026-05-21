@@ -149,6 +149,40 @@
   margin-bottom: 0.375rem;
 }
 
+/**
+ * form-select — Menú desplegable estándar de la tienda (compatible con modo oscuro)
+ * Uso: className="form-select"
+ * Aplicado en: selector de región en checkout, filtros de ordenamiento
+ */
+@utility form-select {
+  padding-inline: 0.75rem;
+  padding-block: 0.625rem;
+  font-size: 0.875rem;
+  border: 1px solid rgb(var(--brand-border));
+  background-color: rgb(var(--brand-background));
+  color: rgb(var(--brand-foreground));
+  outline: none;
+  border-radius: 0;
+  cursor: pointer;
+  transition: box-shadow var(--duration-fast, 150ms);
+  &:focus        { box-shadow: 0 0 0 1px rgb(var(--brand-ring)); }
+  &:disabled     { opacity: 0.5; cursor: not-allowed; }
+  & option {
+    background-color: rgb(var(--brand-background));
+    color: rgb(var(--brand-foreground));
+  }
+}
+
+/**
+ * form-select-sm — Variante pequeña de form-select
+ * Uso: className="form-select form-select-sm"
+ */
+@utility form-select-sm {
+  font-size: 0.75rem;
+  padding-inline: 0.5rem;
+  padding-block: 0.375rem;
+}
+
 
 /* ═══════════════════════════════════════════════════════════════════════════
    TIPOGRAFÍA DE SECCIÓN
@@ -216,6 +250,14 @@
     linear-gradient(90deg, rgb(var(--brand-border)) 1px, transparent 1px);
 }
 
+@utility bg-grid-category {
+  background-image:
+    linear-gradient(rgb(var(--brand-foreground)) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--brand-foreground)) 1px, transparent 1px);
+  background-size: var(--grid-size-md) var(--grid-size-md);
+  opacity: var(--grid-opacity-form);
+}
+
 
 /* ═══════════════════════════════════════════════════════════════════════════
    EFECTOS DE SUPERFICIE
@@ -276,3 +318,166 @@
     border-color: rgb(var(--brand-foreground));
   }
 }
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ESCALA TIPOGRÁFICA FLUIDA
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@utility text-hero {
+  font-size: var(--text-hero);
+}
+
+@utility text-section {
+  font-size: var(--text-section);
+}
+
+@utility text-quote {
+  font-size: var(--text-quote);
+}
+
+@utility text-search {
+  font-size: var(--text-search);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DURACIONES DE TRANSICIÓN ESTÁNDAR
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@utility transition-duration-fast {
+  transition-duration: var(--duration-fast);
+}
+
+@utility transition-duration-base {
+  transition-duration: var(--duration-base);
+}
+
+@utility transition-duration-slow {
+  transition-duration: var(--duration-slow);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FONDOS DE REJILLA ESPECÍFICOS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@utility bg-grid-hero {
+  background-image:
+    linear-gradient(rgb(var(--brand-foreground)) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--brand-foreground)) 1px, transparent 1px);
+  background-size: var(--grid-size-lg) var(--grid-size-lg);
+  opacity: var(--grid-opacity-hero);
+}
+
+@utility bg-grid-break {
+  background-image:
+    linear-gradient(rgb(var(--brand-foreground)) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--brand-foreground)) 1px, transparent 1px);
+  background-size: var(--grid-size-md) var(--grid-size-md);
+  opacity: var(--grid-opacity-break);
+}
+
+@utility bg-grid-form {
+  background-image:
+    linear-gradient(rgb(var(--brand-border)) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--brand-border)) 1px, transparent 1px);
+  background-size: var(--grid-size-sm) var(--grid-size-sm);
+  opacity: var(--grid-opacity-form);
+}
+
+@utility bg-grid-thumbnail {
+  background-image:
+    linear-gradient(rgb(var(--brand-border)) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--brand-border)) 1px, transparent 1px);
+  background-size: var(--grid-size-xs) var(--grid-size-xs);
+}
+
+@utility bg-grid-placeholder {
+  background-image:
+    linear-gradient(rgb(var(--brand-border)) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--brand-border)) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   RETARDO DE ANIMACIÓN (STAGGER) BASADO EN VARIABLE --i
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@utility delay-grid {
+  animation-delay: calc(var(--i, 0) * var(--stagger-grid));
+}
+
+@utility delay-list {
+  animation-delay: calc(var(--i, 0) * var(--stagger-list));
+}
+
+@utility delay-section {
+  animation-delay: var(--stagger-section);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TRANSICIONES DE ELEMENTOS DE INTERFAZ (ACORDEÓN)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@utility accordion-transition {
+  grid-template-rows: var(--grid-rows, 0fr);
+  transition: grid-template-rows var(--duration-base);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOTIVOS GEOMÉTRICOS DECORATIVOS (HOME Y LOOKBOOK)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Home Categories */
+@utility motif-rotated {
+  position: absolute;
+  background-color: rgb(var(--brand-foreground) / 0.03);
+  top: calc(20% + var(--i, 0) * 10%);
+  left: calc(10% + var(--i, 0) * 12%);
+  width: 45%;
+  height: 45%;
+  transform: rotate(calc(var(--i, 0) * 15deg + 10deg));
+}
+
+@utility motif-square {
+  position: absolute;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid rgb(var(--brand-muted-fg) / 0.15);
+  top: 15%;
+  right: calc(12% + var(--i, 0) * 5%);
+}
+
+/* Lookbook Page */
+@utility lookbook-motif-rotated {
+  position: absolute;
+  background-color: rgb(var(--brand-foreground) / 0.05);
+  top: calc(20% + var(--i, 0) * 5%);
+  left: calc(15% + var(--i, 0) * 8%);
+  width: calc(30% + var(--i, 0) * 5%);
+  height: calc(30% + var(--i, 0) * 5%);
+  transform: rotate(calc(var(--i, 0) * 12deg + 15deg));
+}
+
+@utility lookbook-motif-square {
+  position: absolute;
+  width: 4rem;
+  height: 4rem;
+  border: 1px solid rgb(var(--brand-muted-fg) / 0.2);
+  bottom: calc(10% + var(--i, 0) * 3%);
+  right: calc(8% + var(--i, 0) * 4%);
+}
+
+@utility lookbook-motif-dot {
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  background-color: rgb(var(--brand-foreground));
+  top: calc(12% + var(--i, 0) * 6%);
+  left: calc(10% + var(--i, 0) * 3%);
+}
+

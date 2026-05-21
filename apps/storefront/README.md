@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🛍️ Storefront Next.js (White-Label E-commerce)
 
-## Getting Started
+Este es el frontend de la tienda pública construido con **Next.js 15+ (App Router)** y optimizado para ser un preset white-label altamente tematizable, rápido y responsive.
 
-First, run the development server:
+La lógica de negocio está completamente separada del diseño visual, permitiendo adaptar la web a la identidad visual de cualquier cliente sin tocar el código base.
+
+---
+
+## 🛠️ Arquitectura y Carpeta de Temas
+
+El diseño visual está centralizado en `src/theme/` y se compone de tres archivos CSS importados de forma secuencial por `src/app/globals.css`. Este sistema utiliza **Tailwind CSS v4** y propiedades personalizadas (CSS variables).
+
+### Estructura de Capas de Estilos
+
+```
+                     ┌──> tokens.css      (Colores RGB, radios y espaciado)
+src/app/globals.css ─┼──> typography.css  (Fuentes, escala fluida y rejilla decorativa)
+                     └──> utilities.css   (Clases @utility reutilizables)
+```
+
+1. **`src/theme/tokens.css` (Capa de Tokens)**
+   * Define los colores base en formato triplete RGB (`R G B` sin comas) para admitir opacidad dinámica en Tailwind CSS (ej. `bg-primary/80`).
+   * Configura radios de borde, anchos máximos (`--layout-max-width`) y paddings semánticos.
+   * Contiene bloques diferenciados para modo claro (`:root`) y modo oscuro (`.dark`).
+
+2. **`src/theme/typography.css` (Capa de Tipografía y Animación)**
+   * Administra la escala tipográfica fluida (`--text-hero`, `--text-quote`, `--text-search`).
+   * Controla las duraciones y delays de micro-animaciones dinámicas y escalonadas (`--duration-*`, `--stagger-*`).
+   * Define las celdas y la opacidad del fondo de cuadrícula decorativo (`--grid-size-*`, `--grid-opacity-*`).
+
+3. **`src/theme/utilities.css` (Capa de Utilidades y Componentes)**
+   * Registra las directivas de utilidad de Tailwind v4 (`@utility`) para crear clases reutilizables y semánticas, evitando la duplicación de clases complejas de Tailwind en las páginas o componentes.
+   * **Clases Disponibles:**
+     * `btn-primary`, `btn-outline`, `btn-ghost`, `btn-primary-lg` — Botones premium interactivos con sutiles micro-animaciones.
+     * `form-input`, `form-input-error`, `form-label` — Controles y campos de entrada estandarizados.
+     * `bg-grid`, `bg-grid-border` — Fondos con cuadrícula geométrica futurista y elegante.
+     * `surface-blur` — Efectos de desenfoque de fondo premium (glassmorphism).
+     * `chip`, `chip-active` — Filtros y etiquetas interactivas.
+
+---
+
+## 🎨 Guía de Re-Tematizado Rápido
+
+Para re-tematizar la tienda completa y adaptarla a un nuevo cliente en minutos, sigue este checklist:
+
+1. **Modificar Colores:** Abre `src/theme/tokens.css` y actualiza las variables en `:root` (claro) y `.dark` (oscuro) usando tripletes RGB.
+2. **Sincronizar Brand Config:** Refleja la paleta de colores y configuraciones en `packages/assets/brand.config.ts`.
+3. **Cambiar Tipografías:**
+   * Importa las nuevas fuentes de Google Fonts en `src/app/layout.tsx`.
+   * Asigna los nombres de las familias correspondientes en `tokens.css` (`--font-family-display` y `--font-family-sans`).
+4. **Radios y Layouts:** Ajusta `--brand-radius` y las variables `--layout-*` en `tokens.css`.
+5. **Utilidades Especiales:** Si el diseño requiere botones con bordes más afilados o inputs distintos, personaliza los estilos CSS dentro de `utilities.css`.
+
+---
+
+## 🌓 Consistencia y Persistencia de Modo Claro / Oscuro
+
+Para asegurar una experiencia de usuario sobresaliente y evitar el parpadeo blanco indeseado en navegadores (FOUC o *Flash of Unstyled Content*), la app implementa:
+
+1. **Script de Cabecera Síncrono (`layout.tsx`):**
+   Un script embebido en el `<head>` de la página lee el valor del tema guardado en `localStorage` o infiere la preferencia del sistema (`prefers-color-scheme`) e inyecta inmediatamente la clase `.dark` en la etiqueta `<html>` antes de que el navegador comience el renderizado y antes de la hidratación de React.
+2. **SSR-Safe Toggle (`ThemeToggle.tsx`):**
+   El botón de cambio de tema espera de forma segura a que el componente esté montado en el cliente para sincronizarse y realizar cambios en el DOM sin discrepancias entre el HTML estático de Next.js y el DOM dinámico.
+
+---
+
+## 🚀 Cómo Desarrollar en Local
+
+### Iniciar Servidor de Desarrollo
+
+Desde la raíz del monorepo, puedes iniciar el storefront junto con los otros servicios corriendo:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+O si deseas levantar únicamente el storefront de Next.js de manera aislada:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npx turbo run dev --filter=storefront
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+La tienda estará disponible en [http://localhost:3000](http://localhost:3000).
 
-## Learn More
+### Compilar para Producción
 
-To learn more about Next.js, take a look at the following resources:
+Para validar el tipado completo de TypeScript y generar el build de Next.js optimizado:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run build
+```

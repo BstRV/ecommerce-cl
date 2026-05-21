@@ -155,18 +155,8 @@ export default function RegistroPage() {
       <Navbar />
 
       <main className="min-h-screen flex items-center justify-center px-6 pt-24 pb-16 bg-background relative overflow-hidden">
-        {/* Subtle grid pattern background */}
-        <div
-          className="absolute inset-0 opacity-[0.02]"
-          aria-hidden="true"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgb(var(--brand-border)) 1px, transparent 1px),
-              linear-gradient(90deg, rgb(var(--brand-border)) 1px, transparent 1px)
-            `,
-            backgroundSize: "24px 24px",
-          }}
-        />
+        {/* Subtle grid pattern — bg-grid-form de utilities.css */}
+        <div className="bg-grid-form absolute inset-0" aria-hidden="true" />
 
         <div className="w-full max-w-md border border-border bg-background/80 backdrop-blur-md p-8 relative z-10 animate-fade-in shadow-sm">
           <div className="text-center mb-8">
@@ -185,9 +175,9 @@ export default function RegistroPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="firstName" className="text-xs font-semibold tracking-wider uppercase text-muted-foreground">
-                  Nombre
-                </label>
+                {/* form-label de utilities.css */}
+                <label htmlFor="firstName" className="form-label">Nombre</label>
+                {/* form-input de utilities.css */}
                 <input
                   id="firstName"
                   name="firstName"
@@ -195,18 +185,14 @@ export default function RegistroPage() {
                   placeholder="Juan"
                   value={formData.firstName}
                   onChange={handleInputChange}
-                  className={`px-3 py-2.5 text-sm border rounded-none bg-background focus:outline-none focus:ring-1 focus:ring-ring ${
-                    errors.firstName ? "border-destructive" : "border-border"
-                  }`}
+                  className={`form-input ${errors.firstName ? "form-input-error" : ""}`}
                   disabled={isPending}
                 />
                 {errors.firstName && <p className="text-xs text-destructive mt-0.5">{errors.firstName}</p>}
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="lastName" className="text-xs font-semibold tracking-wider uppercase text-muted-foreground">
-                  Apellido
-                </label>
+                <label htmlFor="lastName" className="form-label">Apellido</label>
                 <input
                   id="lastName"
                   name="lastName"
@@ -214,9 +200,7 @@ export default function RegistroPage() {
                   placeholder="Pérez"
                   value={formData.lastName}
                   onChange={handleInputChange}
-                  className={`px-3 py-2.5 text-sm border rounded-none bg-background focus:outline-none focus:ring-1 focus:ring-ring ${
-                    errors.lastName ? "border-destructive" : "border-border"
-                  }`}
+                  className={`form-input ${errors.lastName ? "form-input-error" : ""}`}
                   disabled={isPending}
                 />
                 {errors.lastName && <p className="text-xs text-destructive mt-0.5">{errors.lastName}</p>}
@@ -224,9 +208,7 @@ export default function RegistroPage() {
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="rut" className="text-xs font-semibold tracking-wider uppercase text-muted-foreground">
-                RUT
-              </label>
+              <label htmlFor="rut" className="form-label">RUT</label>
               <input
                 id="rut"
                 name="rut"
@@ -234,18 +216,14 @@ export default function RegistroPage() {
                 placeholder="12.345.678-9"
                 value={formData.rut}
                 onChange={handleInputChange}
-                className={`px-3 py-2.5 text-sm border rounded-none bg-background focus:outline-none focus:ring-1 focus:ring-ring ${
-                  errors.rut ? "border-destructive" : "border-border"
-                }`}
+                className={`form-input ${errors.rut ? "form-input-error" : ""}`}
                 disabled={isPending}
               />
               {errors.rut && <p className="text-xs text-destructive mt-0.5">{errors.rut}</p>}
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="email" className="text-xs font-semibold tracking-wider uppercase text-muted-foreground">
-                Correo Electrónico
-              </label>
+              <label htmlFor="email" className="form-label">Correo Electrónico</label>
               <input
                 id="email"
                 name="email"
@@ -253,18 +231,14 @@ export default function RegistroPage() {
                 placeholder="nombre@ejemplo.com"
                 value={formData.email}
                 onChange={handleInputChange}
-                className={`px-3 py-2.5 text-sm border rounded-none bg-background focus:outline-none focus:ring-1 focus:ring-ring ${
-                  errors.email ? "border-destructive" : "border-border"
-                }`}
+                className={`form-input ${errors.email ? "form-input-error" : ""}`}
                 disabled={isPending}
               />
               {errors.email && <p className="text-xs text-destructive mt-0.5">{errors.email}</p>}
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="password" className="text-xs font-semibold tracking-wider uppercase text-muted-foreground">
-                Contraseña
-              </label>
+              <label htmlFor="password" className="form-label">Contraseña</label>
               <input
                 id="password"
                 name="password"
@@ -272,18 +246,17 @@ export default function RegistroPage() {
                 placeholder="Mínimo 6 caracteres"
                 value={formData.password}
                 onChange={handleInputChange}
-                className={`px-3 py-2.5 text-sm border rounded-none bg-background focus:outline-none focus:ring-1 focus:ring-ring ${
-                  errors.password ? "border-destructive" : "border-border"
-                }`}
+                className={`form-input ${errors.password ? "form-input-error" : ""}`}
                 disabled={isPending}
               />
               {errors.password && <p className="text-xs text-destructive mt-0.5">{errors.password}</p>}
             </div>
 
+            {/* btn-primary de utilities.css */}
             <button
               type="submit"
               disabled={isPending}
-              className="w-full bg-foreground text-background py-4 text-sm font-medium tracking-widest uppercase hover:bg-foreground/85 active:scale-[0.99] transition-all disabled:opacity-50 mt-2"
+              className="btn-primary w-full mt-2"
             >
               {isPending ? "Registrando..." : "Crear Cuenta"}
             </button>

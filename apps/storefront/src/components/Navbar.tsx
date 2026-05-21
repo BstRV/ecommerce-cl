@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { useCart } from "@/lib/cart-store"
 import MobileMenu from "./MobileMenu"
 import ThemeToggle from "./ThemeToggle"
@@ -10,11 +11,14 @@ const NAV_LINKS = [
   { label: "Colecciones", href: "/colecciones" },
   { label: "Novedades", href: "/novedades" },
   { label: "Ofertas", href: "/ofertas" },
+  { label: "Nosotros", href: "/nosotros" },
+  { label: "Contacto", href: "/contacto" },
 ]
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const { itemCount } = useCart()
+  const pathname = usePathname()
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 16)
@@ -27,7 +31,7 @@ export function Navbar() {
       className={[
         "fixed top-0 inset-x-0 z-50 transition-all duration-300",
         scrolled
-          ? "bg-background/95 backdrop-blur-sm border-b border-border"
+          ? "surface-blur border-b border-border"
           : "bg-transparent",
       ].join(" ")}
     >
@@ -49,29 +53,48 @@ export function Navbar() {
 
         {/* Primary nav */}
         <ul className="hidden md:flex items-center gap-8 list-none m-0 p-0">
-          {NAV_LINKS.map((link) => (
-            <li key={link.href}>
-              <a
-                href={link.href}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href))
+            return (
+              <li key={link.href} className="relative group py-1">
+                <Link
+                  href={link.href}
+                  className={[
+                    "text-sm font-medium transition-colors duration-300 relative pb-1",
+                    isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground",
+                  ].join(" ")}
+                >
+                  {link.label}
+                  <span
+                    className={[
+                      "absolute bottom-0 left-0 w-full h-[1.5px] bg-foreground transition-transform duration-300 origin-left",
+                      isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
+                    ].join(" ")}
+                  />
+                </Link>
+              </li>
+            )
+          })}
         </ul>
 
         {/* Actions */}
         <div className="flex items-center gap-4">
-          <a
+          <Link
             href="/buscar"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             aria-label="Buscar"
           >
             <SearchIcon />
-          </a>
+          </Link>
           <ThemeToggle />
-          <a
+          <Link
+            href="/cuenta"
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            aria-label="Mi cuenta"
+          >
+            <UserIcon />
+          </Link>
+          <Link
             href="/carrito"
             className="relative text-sm text-muted-foreground hover:text-foreground transition-colors"
             aria-label="Carrito"
@@ -82,7 +105,7 @@ export function Navbar() {
                 {itemCount > 99 ? "99+" : itemCount}
               </span>
             )}
-          </a>
+          </Link>
           <MobileMenu />
         </div>
       </nav>
@@ -125,6 +148,25 @@ function BagIcon() {
       <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
       <path d="M3 6h18" />
       <path d="M16 10a4 4 0 0 1-8 0" />
+    </svg>
+  )
+}
+
+function UserIcon() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+      <circle cx="12" cy="7" r="4" />
     </svg>
   )
 }

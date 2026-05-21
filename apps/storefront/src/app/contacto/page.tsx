@@ -1,8 +1,10 @@
 'use client'
 
 import { useState } from 'react'
+import { Navbar } from '@/components/Navbar'
 import { PageHeader } from '@/components/PageHeader'
 import { submitContactForm } from './actions'
+import { Footer } from '@/components/Footer'
 
 // Note: metadata export moved to layout since this is now a client component
 // export const metadata: Metadata = {
@@ -55,14 +57,17 @@ export default function ContactoPage() {
 
   return (
     <>
-      <PageHeader
-        title="Contacto"
-        subtitle="Estamos aquí para ayudarte."
-        breadcrumbs={[{ label: 'Inicio', href: '/' }, { label: 'Contacto' }]}
-      />
+      <Navbar />
 
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-14">
+      <main className="flex-1">
+        <PageHeader
+          title="Contacto"
+          subtitle="Estamos aquí para ayudarte."
+          breadcrumbs={[{ label: "Contacto" }]}
+        />
+
+        <div className="max-w-2xl mx-auto px-6 pb-24 mt-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-14">
           {/* Info de contacto */}
           <div className="flex flex-col gap-6">
             <div>
@@ -97,7 +102,7 @@ export default function ContactoPage() {
           {/* Formulario */}
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="nombre" className="text-sm font-medium">
+              <label htmlFor="nombre" className="form-label">
                 Nombre
               </label>
               <input
@@ -109,12 +114,12 @@ export default function ContactoPage() {
                 value={formData.nombre}
                 onChange={handleChange}
                 disabled={isSubmitting}
-                className="w-full px-3 py-2.5 text-sm border border-input rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground bg-background disabled:opacity-50 disabled:cursor-not-allowed"
+                className="form-input"
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="email" className="text-sm font-medium">
+              <label htmlFor="email" className="form-label">
                 Correo electrónico
               </label>
               <input
@@ -126,12 +131,12 @@ export default function ContactoPage() {
                 value={formData.email}
                 onChange={handleChange}
                 disabled={isSubmitting}
-                className="w-full px-3 py-2.5 text-sm border border-input rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground bg-background disabled:opacity-50 disabled:cursor-not-allowed"
+                className="form-input"
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="mensaje" className="text-sm font-medium">
+              <label htmlFor="mensaje" className="form-label">
                 Mensaje
               </label>
               <textarea
@@ -143,7 +148,7 @@ export default function ContactoPage() {
                 value={formData.mensaje}
                 onChange={handleChange}
                 disabled={isSubmitting}
-                className="w-full px-3 py-2.5 text-sm border border-input rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground resize-none bg-background disabled:opacity-50 disabled:cursor-not-allowed"
+                className="form-input resize-none"
               />
             </div>
 
@@ -162,7 +167,7 @@ export default function ContactoPage() {
             <button
               type="submit"
               disabled={isSubmitting || submitted}
-              className="w-full py-2.5 text-sm font-medium bg-primary text-primary-foreground hover:opacity-90 transition-opacity rounded-[var(--brand-radius)] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-primary w-full"
             >
               {isSubmitting ? 'Enviando...' : submitted ? 'Mensaje enviado' : 'Enviar mensaje'}
             </button>
@@ -173,6 +178,9 @@ export default function ContactoPage() {
           </form>
         </div>
       </div>
-    </>
-  )
+    </main>
+
+    <Footer />
+  </>
+)
 }

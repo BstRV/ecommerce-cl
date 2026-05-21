@@ -1,4 +1,6 @@
 import { notFound } from 'next/navigation'
+import { Navbar } from '@/components/Navbar'
+import { Footer } from '@/components/Footer'
 import { PageHeader } from '@/components/PageHeader'
 import type { Metadata } from 'next'
 
@@ -93,17 +95,18 @@ export default async function HelpPage({ params }: Props) {
 
   return (
     <>
+      <Navbar />
+
       <PageHeader
         title={content.title}
         subtitle={content.subtitle}
         breadcrumbs={[
-          { label: 'Inicio', href: '/' },
           { label: 'Ayuda', href: '#' },
           { label: content.title },
         ]}
       />
 
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+      <main className="max-w-3xl mx-auto px-6 pb-24">
         <div className="flex flex-col gap-10">
           {content.sections.map((section) => (
             <section key={section.heading}>
@@ -129,7 +132,9 @@ export default async function HelpPage({ params }: Props) {
             Contáctanos
           </a>
         </div>
-      </div>
+      </main>
+
+      <Footer />
     </>
   )
 }

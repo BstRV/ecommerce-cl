@@ -5,14 +5,15 @@ const FOOTER_COLS = [
     title: "Tienda",
     links: [
       { label: "Colecciones", href: "/colecciones" },
-      { label: "Novedades", href: "/colecciones?sort=new" },
-      { label: "Ofertas", href: "/colecciones?sort=price-asc" },
+      { label: "Novedades", href: "/novedades" },
+      { label: "Ofertas", href: "/ofertas" },
       { label: "Lookbook", href: "/lookbook" },
     ],
   },
   {
     title: "Ayuda",
     links: [
+      { label: "Preguntas Frecuentes", href: "/faq" },
       { label: "Envíos", href: "/ayuda/envios" },
       { label: "Devoluciones", href: "/ayuda/devoluciones" },
       { label: "Tallas", href: "/ayuda/tallas" },
@@ -23,9 +24,6 @@ const FOOTER_COLS = [
     title: "Empresa",
     links: [
       { label: "Nosotros", href: "/nosotros" },
-      { label: "Prensa", href: "/prensa" },
-      { label: "Sustentabilidad", href: "/sustentabilidad" },
-      { label: "Trabaja con nosotros", href: "/careers" },
     ],
   },
 ]
@@ -61,12 +59,12 @@ export function Footer() {
             <ul className="space-y-3 list-none p-0 m-0">
               {col.links.map((link) => (
                 <li key={link.label}>
-                  <a
+                  <Link
                     href={link.href}
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -79,12 +77,12 @@ export function Footer() {
         <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
           <p>© {new Date().getFullYear()} Ecommerce Preset. Todos los derechos reservados.</p>
           <div className="flex gap-5">
-            <a href="/privacidad" className="hover:text-foreground transition-colors">
+            <Link href="/privacidad" className="hover:text-foreground transition-colors">
               Privacidad
-            </a>
-            <a href="/terminos" className="hover:text-foreground transition-colors">
+            </Link>
+            <Link href="/terminos" className="hover:text-foreground transition-colors">
               Términos
-            </a>
+            </Link>
           </div>
         </div>
       </div>

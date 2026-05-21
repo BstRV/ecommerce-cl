@@ -36,17 +36,15 @@ export function FilterBar({ categories }: FilterBarProps) {
   )
 
   return (
-    <div className="border-b border-border sticky top-16 z-40 bg-background/95 backdrop-blur-sm">
+    <div className="border-b border-border sticky top-16 z-40 surface-blur">
       <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between gap-6 overflow-x-auto scrollbar-none">
         {/* Category chips */}
         <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={() => updateParam("categoria", null)}
             className={[
-              "px-3 py-1.5 text-xs tracking-wide transition-colors border whitespace-nowrap",
-              !activeCategory
-                ? "bg-foreground text-background border-foreground"
-                : "border-border text-muted-foreground hover:border-foreground hover:text-foreground",
+              "chip",
+              !activeCategory ? "chip-active" : "",
             ].join(" ")}
           >
             Todos
@@ -62,10 +60,8 @@ export function FilterBar({ categories }: FilterBarProps) {
                 )
               }
               className={[
-                "px-3 py-1.5 text-xs tracking-wide transition-colors border whitespace-nowrap",
-                activeCategory === cat.handle
-                  ? "bg-foreground text-background border-foreground"
-                  : "border-border text-muted-foreground hover:border-foreground hover:text-foreground",
+                "chip",
+                activeCategory === cat.handle ? "chip-active" : "",
               ].join(" ")}
             >
               {cat.name}
@@ -85,7 +81,7 @@ export function FilterBar({ categories }: FilterBarProps) {
             id="sort-select"
             value={activeSort}
             onChange={(e) => updateParam("sort", e.target.value || null)}
-            className="text-xs border border-border bg-transparent text-foreground px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-ring"
+            className="form-select form-select-sm"
           >
             {SORT_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>

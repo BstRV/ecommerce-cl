@@ -88,7 +88,7 @@ export default function CartPage() {
 
               <Link
                 href="/checkout"
-                className="mt-6 block w-full bg-foreground text-background py-4 text-center text-sm font-medium tracking-widest uppercase hover:bg-foreground/85 transition-colors"
+                className="mt-6 block w-full btn-primary text-center"
               >
                 Continuar al pago
               </Link>

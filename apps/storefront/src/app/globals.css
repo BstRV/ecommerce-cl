@@ -111,4 +111,9 @@
     background-color: rgb(var(--brand-background));
     color: rgb(var(--brand-foreground));
   }
+
+  select option {
+    background-color: rgb(var(--brand-background));
+    color: rgb(var(--brand-foreground));
+  }
 }

@@ -139,11 +139,11 @@ Ver [.env.example](.env.example) para la lista completa con descripción de cada
 |---|---|
 | Monorepo Turborepo + npm workspaces | Completado |
 | Docker Compose (PostgreSQL, Redis, Meilisearch) | Completado |
-| Sistema white-label con CSS Variables + `brand.config.ts` | Completado |
+| Sistema white-label abstracto de 3 capas (`tokens.css`, `typography.css`, `utilities.css`) + `brand.config.ts` | Completado |
 | Librería de componentes `packages/ui` (Shadcn/UI neutro) | Completado |
 | MedusaJS v2 configurado con módulo de analíticas custom | Completado |
-| Storefront Next.js con todas las páginas estáticas | Completado |
-| Dark/light mode con persistencia en `localStorage` | Completado |
+| Storefront Next.js con todas las páginas estáticas migradas al sistema abstracto | Completado |
+| Dark/light mode con persistencia en `localStorage` y prevención de FOUC | Completado |
 | Páginas de login, registro y cuenta de cliente | Completado |
 | `ProductViewTracker` — tracking `view_item` y `add_to_cart` | Completado |
 | Cliente Medusa (`lib/medusa.ts`) — conexión real al backend | Completado |

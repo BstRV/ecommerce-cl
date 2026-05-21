@@ -79,18 +79,8 @@ export default function LoginPage() {
       <Navbar />
 
       <main className="min-h-screen flex items-center justify-center px-6 pt-24 pb-16 bg-background relative overflow-hidden">
-        {/* Subtle grid pattern background */}
-        <div
-          className="absolute inset-0 opacity-[0.02]"
-          aria-hidden="true"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgb(var(--brand-border)) 1px, transparent 1px),
-              linear-gradient(90deg, rgb(var(--brand-border)) 1px, transparent 1px)
-            `,
-            backgroundSize: "24px 24px",
-          }}
-        />
+        {/* Subtle grid pattern — bg-grid-form de utilities.css */}
+        <div className="bg-grid-form absolute inset-0" aria-hidden="true" />
 
         <div className="w-full max-w-md border border-border bg-background/80 backdrop-blur-md p-8 relative z-10 animate-fade-in shadow-sm">
           <div className="text-center mb-8">
@@ -108,9 +98,9 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="email" className="text-xs font-semibold tracking-wider uppercase text-muted-foreground">
-                Correo Electrónico
-              </label>
+              {/* form-label de utilities.css */}
+              <label htmlFor="email" className="form-label">Correo Electrónico</label>
+              {/* form-input de utilities.css */}
               <input
                 id="email"
                 name="email"
@@ -118,9 +108,7 @@ export default function LoginPage() {
                 placeholder="nombre@ejemplo.com"
                 value={formData.email}
                 onChange={handleInputChange}
-                className={`px-3 py-2.5 text-sm border rounded-none bg-background focus:outline-none focus:ring-1 focus:ring-ring ${
-                  errors.email ? "border-destructive" : "border-border"
-                }`}
+                className={`form-input ${errors.email ? "form-input-error" : ""}`}
                 disabled={isPending}
               />
               {errors.email && <p className="text-xs text-destructive mt-0.5">{errors.email}</p>}
@@ -128,9 +116,8 @@ export default function LoginPage() {
 
             <div className="flex flex-col gap-1.5">
               <div className="flex justify-between items-center">
-                <label htmlFor="password" className="text-xs font-semibold tracking-wider uppercase text-muted-foreground">
-                  Contraseña
-                </label>
+                {/* form-label de utilities.css */}
+                <label htmlFor="password" className="form-label">Contraseña</label>
                 <Link
                   href="/ayuda"
                   className="text-xs text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2"
@@ -138,6 +125,7 @@ export default function LoginPage() {
                   ¿Olvidaste tu contraseña?
                 </Link>
               </div>
+              {/* form-input de utilities.css */}
               <input
                 id="password"
                 name="password"
@@ -145,18 +133,17 @@ export default function LoginPage() {
                 placeholder="••••••••"
                 value={formData.password}
                 onChange={handleInputChange}
-                className={`px-3 py-2.5 text-sm border rounded-none bg-background focus:outline-none focus:ring-1 focus:ring-ring ${
-                  errors.password ? "border-destructive" : "border-border"
-                }`}
+                className={`form-input ${errors.password ? "form-input-error" : ""}`}
                 disabled={isPending}
               />
               {errors.password && <p className="text-xs text-destructive mt-0.5">{errors.password}</p>}
             </div>
 
+            {/* btn-primary de utilities.css */}
             <button
               type="submit"
               disabled={isPending}
-              className="w-full bg-foreground text-background py-4 text-sm font-medium tracking-widest uppercase hover:bg-foreground/85 active:scale-[0.99] transition-all disabled:opacity-50 mt-2"
+              className="btn-primary w-full mt-2"
             >
               {isPending ? "Ingresando..." : "Ingresar"}
             </button>
@@ -173,10 +160,11 @@ export default function LoginPage() {
           </div>
 
           {/* Google Login Button */}
+          {/* btn-outline de utilities.css */}
           <button
             onClick={handleGoogleLogin}
             type="button"
-            className="w-full border border-border bg-background py-3.5 px-4 flex items-center justify-center gap-3 hover:bg-secondary transition-colors"
+            className="btn-outline w-full py-3.5"
           >
             {/* Google Icon */}
             <svg className="w-5 h-5" viewBox="0 0 24 24" aria-hidden="true">

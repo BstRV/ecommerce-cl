@@ -135,7 +135,7 @@ export default function CheckoutPage() {
         <p className="font-display text-2xl mb-4">Tu carrito está vacío</p>
         <Link
           href="/colecciones"
-          className="px-6 py-2.5 text-sm font-medium bg-primary text-primary-foreground rounded-[var(--brand-radius)] hover:opacity-90 transition-opacity"
+          className="btn-primary"
         >
           Ver colecciones
         </Link>
@@ -170,7 +170,7 @@ export default function CheckoutPage() {
               <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5">
-                    <label htmlFor="nombre" className="text-sm font-medium">Nombre</label>
+                    <label htmlFor="nombre" className="form-label">Nombre</label>
                     <input
                       id="nombre"
                       name="nombre"
@@ -178,14 +178,12 @@ export default function CheckoutPage() {
                       placeholder="María"
                       value={formData.nombre}
                       onChange={handleInputChange}
-                      className={`px-3 py-2.5 text-sm border rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground bg-background ${
-                        errors.nombre ? 'border-destructive' : 'border-input'
-                      }`}
+                      className={`form-input ${errors.nombre ? 'form-input-error' : ''}`}
                     />
                     {errors.nombre && <p className="text-xs text-destructive">{errors.nombre}</p>}
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label htmlFor="apellido" className="text-sm font-medium">Apellido</label>
+                    <label htmlFor="apellido" className="form-label">Apellido</label>
                     <input
                       id="apellido"
                       name="apellido"
@@ -193,16 +191,14 @@ export default function CheckoutPage() {
                       placeholder="González"
                       value={formData.apellido}
                       onChange={handleInputChange}
-                      className={`px-3 py-2.5 text-sm border rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground bg-background ${
-                        errors.apellido ? 'border-destructive' : 'border-input'
-                      }`}
+                      className={`form-input ${errors.apellido ? 'form-input-error' : ''}`}
                     />
                     {errors.apellido && <p className="text-xs text-destructive">{errors.apellido}</p>}
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="email" className="text-sm font-medium">Correo electrónico</label>
+                  <label htmlFor="email" className="form-label">Correo electrónico</label>
                   <input
                     id="email"
                     name="email"
@@ -210,15 +206,13 @@ export default function CheckoutPage() {
                     placeholder="maria@correo.cl"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className={`px-3 py-2.5 text-sm border rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground bg-background ${
-                      errors.email ? 'border-destructive' : 'border-input'
-                    }`}
+                    className={`form-input ${errors.email ? 'form-input-error' : ''}`}
                   />
                   {errors.email && <p className="text-xs text-destructive">{errors.email}</p>}
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="telefono" className="text-sm font-medium">Teléfono</label>
+                  <label htmlFor="telefono" className="form-label">Teléfono</label>
                   <input
                     id="telefono"
                     name="telefono"
@@ -226,15 +220,13 @@ export default function CheckoutPage() {
                     placeholder="+56 9 1234 5678"
                     value={formData.telefono}
                     onChange={handleInputChange}
-                    className={`px-3 py-2.5 text-sm border rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground bg-background ${
-                      errors.telefono ? 'border-destructive' : 'border-input'
-                    }`}
+                    className={`form-input ${errors.telefono ? 'form-input-error' : ''}`}
                   />
                   {errors.telefono && <p className="text-xs text-destructive">{errors.telefono}</p>}
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="direccion" className="text-sm font-medium">Dirección</label>
+                  <label htmlFor="direccion" className="form-label">Dirección</label>
                   <input
                     id="direccion"
                     name="direccion"
@@ -242,16 +234,14 @@ export default function CheckoutPage() {
                     placeholder="Av. Providencia 1234, Depto 5"
                     value={formData.direccion}
                     onChange={handleInputChange}
-                    className={`px-3 py-2.5 text-sm border rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground bg-background ${
-                      errors.direccion ? 'border-destructive' : 'border-input'
-                    }`}
+                    className={`form-input ${errors.direccion ? 'form-input-error' : ''}`}
                   />
                   {errors.direccion && <p className="text-xs text-destructive">{errors.direccion}</p>}
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5">
-                    <label htmlFor="ciudad" className="text-sm font-medium">Ciudad</label>
+                    <label htmlFor="ciudad" className="form-label">Ciudad</label>
                     <input
                       id="ciudad"
                       name="ciudad"
@@ -259,22 +249,18 @@ export default function CheckoutPage() {
                       placeholder="Santiago"
                       value={formData.ciudad}
                       onChange={handleInputChange}
-                      className={`px-3 py-2.5 text-sm border rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring placeholder:text-muted-foreground bg-background ${
-                        errors.ciudad ? 'border-destructive' : 'border-input'
-                      }`}
+                      className={`form-input ${errors.ciudad ? 'form-input-error' : ''}`}
                     />
                     {errors.ciudad && <p className="text-xs text-destructive">{errors.ciudad}</p>}
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label htmlFor="region" className="text-sm font-medium">Región</label>
+                    <label htmlFor="region" className="form-label">Región</label>
                     <select
                       id="region"
                       name="region"
                       value={formData.region}
                       onChange={handleInputChange}
-                      className={`px-3 py-2.5 text-sm border rounded-[var(--brand-radius)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring text-foreground bg-background ${
-                        errors.region ? 'border-destructive' : 'border-input'
-                      }`}
+                      className={`form-select ${errors.region ? 'form-input-error' : ''}`}
                     >
                       <option value="">Seleccionar</option>
                       <option value="Región Metropolitana">Región Metropolitana</option>
@@ -300,7 +286,7 @@ export default function CheckoutPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-3 mt-2 text-sm font-medium bg-primary text-primary-foreground hover:opacity-90 disabled:opacity-50 transition-opacity rounded-[var(--brand-radius)]"
+                  className="btn-primary w-full mt-2"
                 >
                   {isSubmitting ? 'Procesando...' : 'Continuar al resumen'}
                 </button>

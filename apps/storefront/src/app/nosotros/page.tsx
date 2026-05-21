@@ -42,9 +42,8 @@ export default function NosotrosPage() {
         {/* Manifesto */}
         <section className="max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-[1fr_1.2fr] gap-16 items-start">
           <div className="animate-fade-up">
-            <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-6">
-              Nuestra historia
-            </p>
+            {/* section-label de utilities.css */}
+            <p className="section-label mb-6">Nuestra historia</p>
             <h2 className="font-display text-5xl lg:text-6xl text-foreground leading-tight">
               Nacemos del
               <br />
@@ -54,7 +53,8 @@ export default function NosotrosPage() {
             </h2>
           </div>
 
-          <div className="space-y-6 animate-fade-up" style={{ animationDelay: "120ms" }}>
+          {/* stagger-section desde typography.css */}
+          <div className="space-y-6 animate-fade-up delay-section">
             <p className="text-muted-foreground leading-relaxed">
               Preset nació en Santiago en 2022 con una premisa simple: la moda no debería
               ser ruidosa. Fundamos la marca como respuesta directa a la sobreproducción
@@ -75,19 +75,12 @@ export default function NosotrosPage() {
 
         {/* Geometric break */}
         <div className="relative overflow-hidden bg-background border-y border-border py-24 px-6" aria-hidden="true">
-          <div
-            className="absolute inset-0 opacity-[0.05]"
-            style={{
-              backgroundImage: `
-                linear-gradient(rgb(var(--brand-foreground)) 1px, transparent 1px),
-                linear-gradient(90deg, rgb(var(--brand-foreground)) 1px, transparent 1px)
-              `,
-              backgroundSize: "48px 48px",
-            }}
-          />
+          {/* bg-grid de utilities.css */}
+          <div className="bg-grid-break absolute inset-0" />
           <div className="relative max-w-7xl mx-auto flex items-center justify-center gap-8">
             <div className="w-px h-24 bg-foreground/20" />
-            <p className="font-display text-foreground text-center" style={{ fontSize: "clamp(1.5rem, 4vw, 3rem)" }}>
+            {/* var(--text-quote) desde typography.css */}
+            <p className="font-display text-foreground text-center text-quote">
               &ldquo;La ropa más elegante es la que no necesita gritar.&rdquo;
             </p>
             <div className="w-px h-24 bg-foreground/20" />
@@ -96,15 +89,14 @@ export default function NosotrosPage() {
 
         {/* Values grid */}
         <section className="max-w-7xl mx-auto px-6 py-24">
-          <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-12">
-            Nuestros valores
-          </p>
+          {/* section-label de utilities.css */}
+          <p className="section-label mb-12">Nuestros valores</p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {VALUES.map((v, i) => (
               <div
                 key={v.number}
-                className="animate-fade-up"
-                style={{ animationDelay: `${i * 80}ms` }}
+                className="animate-fade-up delay-list"
+                style={{ "--i": i } as React.CSSProperties}
               >
                 <p className="font-display text-6xl text-muted-foreground/20 leading-none mb-4">
                   {v.number}
@@ -133,9 +125,8 @@ export default function NosotrosPage() {
             </div>
 
             <div>
-              <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4">
-                Dónde estamos
-              </p>
+              {/* section-label de utilities.css */}
+              <p className="section-label mb-4">Dónde estamos</p>
               <h2 className="font-display text-4xl text-foreground leading-tight mb-6">
                 Santiago de Chile
               </h2>
@@ -143,10 +134,8 @@ export default function NosotrosPage() {
                 Nuestro estudio y showroom se encuentran en Providencia. Si quieres
                 conocer la colección en persona, escríbenos para coordinar una visita.
               </p>
-              <a
-                href="mailto:hola@preset.cl"
-                className="inline-flex items-center gap-2 text-sm font-medium text-foreground border-b border-foreground pb-0.5 hover:border-muted-foreground hover:text-muted-foreground transition-colors"
-              >
+              {/* link-underline de utilities.css */}
+              <a href="mailto:hola@preset.cl" className="link-underline">
                 hola@preset.cl →
               </a>
             </div>
@@ -158,10 +147,8 @@ export default function NosotrosPage() {
           <h2 className="font-display text-4xl text-foreground mb-6">
             ¿Listo para explorar?
           </h2>
-          <a
-            href="/colecciones"
-            className="inline-flex items-center gap-3 bg-foreground text-background px-8 py-4 text-sm font-medium tracking-wide hover:bg-foreground/85 transition-colors"
-          >
+          {/* btn-primary de utilities.css */}
+          <a href="/colecciones" className="btn-primary">
             Ver colecciones
             <span aria-hidden="true">→</span>
           </a>

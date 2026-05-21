@@ -28,6 +28,7 @@ export default function ThemeToggle() {
   // El script de layout.tsx ya aplicó la clase correcta → solo la leemos.
   useEffect(() => {
     const isDark = document.documentElement.classList.contains('dark')
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDark(isDark)
   }, [])
 

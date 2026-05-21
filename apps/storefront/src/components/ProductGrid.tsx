@@ -47,8 +47,8 @@ export function ProductGrid({
           {products.map((product, i) => (
             <div
               key={product.id}
-              className="animate-fade-up"
-              style={{ animationDelay: `${i * 45}ms` }}
+              className="animate-fade-up delay-grid"
+              style={{ "--i": i } as React.CSSProperties}
             >
               <ProductCard product={product} patternIndex={i % 4} />
             </div>

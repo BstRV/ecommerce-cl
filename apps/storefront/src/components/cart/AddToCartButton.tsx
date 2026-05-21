@@ -41,12 +41,12 @@ export function AddToCartButton({
           : "Agregar al carrito"
       }
       className={[
-        "w-full py-4 text-sm font-medium tracking-widest uppercase transition-all duration-200",
+        "btn-primary w-full py-4",
         outOfStock
-          ? "bg-secondary text-muted-foreground cursor-not-allowed"
+          ? "!bg-secondary !text-muted-foreground cursor-not-allowed opacity-100"
           : state === "added"
-          ? "bg-foreground/80 text-background cursor-default"
-          : "bg-foreground text-background hover:bg-foreground/85 active:scale-[0.99]",
+          ? "!bg-foreground/80 cursor-default"
+          : "",
       ].join(" ")}
     >
       {outOfStock ? "Sin stock" : state === "added" ? "Agregado ✓" : "Agregar al carrito"}

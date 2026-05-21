@@ -1,8 +1,10 @@
 import { MOCK_PRODUCTS, CATEGORIES, filterByCategory } from '@/lib/mock-data'
+import { Navbar } from '@/components/Navbar'
 import { PageHeader } from '@/components/PageHeader'
 import { FilterBar } from '@/components/FilterBar'
 import { ProductGrid } from '@/components/ProductGrid'
 import { EmptyState } from '@/components/EmptyState'
+import { Footer } from '@/components/Footer'
 
 interface SearchParams {
   categoria?: string
@@ -37,33 +39,39 @@ export default async function OfertasPage({ searchParams }: Props) {
 
   return (
     <>
-      <PageHeader
-        title="Ofertas"
-        subtitle={`${products.length} productos en oferta`}
-        breadcrumbs={[{ label: 'Inicio', href: '/' }, { label: 'Ofertas' }]}
-      />
+      <Navbar />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        {/* Banner informativo de ofertas */}
-        <div className="mb-8 p-4 border border-border bg-secondary rounded-[var(--brand-radius)] flex items-center gap-3">
-          <div className="w-2 h-2 rounded-full bg-foreground flex-shrink-0" />
-          <p className="text-sm text-foreground">
-            Precios especiales por tiempo limitado. No se requieren códigos de descuento.
-          </p>
+      <main className="flex-1">
+        <PageHeader
+          title="Ofertas"
+          subtitle={`${products.length} productos en oferta`}
+          breadcrumbs={[{ label: "Ofertas" }]}
+        />
+
+        <div className="max-w-7xl mx-auto px-6 pb-16">
+          {/* Banner informativo de ofertas */}
+          <div className="mb-8 p-4 border border-border bg-secondary rounded-[var(--brand-radius)] flex items-center gap-3">
+            <div className="w-2 h-2 rounded-full bg-foreground flex-shrink-0" />
+            <p className="text-sm text-foreground">
+              Precios especiales por tiempo limitado. No se requieren códigos de descuento.
+            </p>
+          </div>
+
+          <FilterBar categories={CATEGORIES} />
+
+          {products.length === 0 ? (
+            <EmptyState
+              title="Sin ofertas disponibles"
+              description="Vuelve pronto, agregamos nuevas ofertas regularmente."
+              action={{ label: 'Ver todas las colecciones', href: '/colecciones' }}
+            />
+          ) : (
+            <ProductGrid products={products} />
+          )}
         </div>
+      </main>
 
-        <FilterBar categories={CATEGORIES} />
-
-        {products.length === 0 ? (
-          <EmptyState
-            title="Sin ofertas disponibles"
-            description="Vuelve pronto, agregamos nuevas ofertas regularmente."
-            action={{ label: 'Ver todas las colecciones', href: '/colecciones' }}
-          />
-        ) : (
-          <ProductGrid products={products} />
-        )}
-      </div>
+      <Footer />
     </>
   )
 }

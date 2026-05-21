@@ -1,14 +1,29 @@
 import type { BrandConfig } from "@ecommerce-preset/types"
 
 /**
- * Central white-label configuration.
+ * Configuración central de marca — White-Label Brand Config
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Este es el archivo de referencia conceptual de la identidad de marca.
+ * Aquí se documenta qué decisiones visuales se tomaron y por qué.
  *
- * This is the single place to adjust the brand identity. Values here
- * are the canonical reference; the CSS custom properties in
- * apps/storefront/src/theme/tokens.css must be kept in sync with
- * any color changes made here.
+ * PARA RE-TEMATIZAR LA TIENDA (en orden):
+ *   1. Editar colors aquí → reflejar en src/theme/tokens.css (:root y .dark)
+ *   2. Editar typography aquí → reflejar en src/app/layout.tsx (next/font imports)
+ *                               y en src/theme/tokens.css (--font-family-*)
+ *   3. Editar radius aquí → reflejar en src/theme/tokens.css (--brand-radius)
+ *   4. Ajustar tamaños fluidos en src/theme/typography.css
+ *   5. Ajustar patrones visuales en src/theme/utilities.css
  *
- * Font strings match the CSS fallback chains defined in tokens.css.
+ * SINCRONIZACIÓN:
+ *   Los valores numéricos de colors deben coincidir EXACTAMENTE con los
+ *   --brand-* en tokens.css (formato RGB: "R G B" sin comas).
+ *   Este archivo es la fuente de documentación; tokens.css es la fuente
+ *   de verdad que usa el navegador en tiempo de ejecución.
+ *
+ * ARCHIVOS DE TEMA (todos en apps/storefront/src/theme/):
+ *   - tokens.css      → colores, radios, layout, tipografías base
+ *   - typography.css  → escala fluida, tracking, grids decorativos, timings
+ *   - utilities.css   → @utility: botones, inputs, chips, fondos, efectos
  */
 export const brandConfig = {
   name: "Ecommerce Preset",

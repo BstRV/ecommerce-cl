@@ -26,15 +26,8 @@ export function CartLineItem({ item }: CartLineItemProps) {
           />
         ) : (
           <div
-            className="absolute inset-0"
+            className="bg-grid-thumbnail absolute inset-0"
             aria-hidden="true"
-            style={{
-              backgroundImage: `
-                linear-gradient(rgb(var(--brand-border)) 1px, transparent 1px),
-                linear-gradient(90deg, rgb(var(--brand-border)) 1px, transparent 1px)
-              `,
-              backgroundSize: "16px 16px",
-            }}
           />
         )}
       </div>

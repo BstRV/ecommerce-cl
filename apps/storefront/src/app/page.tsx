@@ -16,18 +16,8 @@ export default async function Home() {
 
         {/* ── Hero ── */}
         <section className="relative min-h-svh flex flex-col justify-end pb-20 px-6 overflow-hidden bg-background">
-          {/* Subtle grid overlay */}
-          <div
-            className="absolute inset-0 opacity-[0.04]"
-            aria-hidden="true"
-            style={{
-              backgroundImage: `
-                linear-gradient(rgb(var(--brand-foreground)) 1px, transparent 1px),
-                linear-gradient(90deg, rgb(var(--brand-foreground)) 1px, transparent 1px)
-              `,
-              backgroundSize: "60px 60px",
-            }}
-          />
+          {/* Subtle grid overlay — usa bg-grid de utilities.css, tamaño desde typography.css */}
+          <div className="bg-grid-hero absolute inset-0" aria-hidden="true" />
 
           {/* Decorative diagonal line */}
           <div
@@ -36,34 +26,89 @@ export default async function Home() {
           />
 
           <div className="relative max-w-7xl mx-auto w-full">
-            <p className="text-foreground/40 text-xs tracking-[0.3em] uppercase mb-6">
+            {/* section-label de utilities.css */}
+            <p className="section-label text-foreground/40 mb-6">
               Colección 2025
             </p>
 
-            <h1
-              className="font-display text-foreground leading-none tracking-tight"
-              style={{ fontSize: "clamp(3.5rem, 12vw, 10rem)" }}
-            >
+            {/* Tamaño fluido desde typography.css */}
+            <h1 className="font-display text-foreground leading-none tracking-tight text-hero">
               Nueva
               <br />
               Temporada
             </h1>
 
             <div className="mt-10 flex flex-wrap items-center gap-6">
-              <a
-                href="/colecciones"
-                className="inline-flex items-center gap-3 bg-primary text-primary-foreground px-6 py-3 text-sm font-medium tracking-wide hover:bg-primary/90 transition-colors"
-              >
+              {/* btn-primary de utilities.css */}
+              <a href="/colecciones" className="btn-primary">
                 Explorar Colección
                 <span aria-hidden="true">→</span>
               </a>
-              <a
-                href="/colecciones"
-                className="inline-flex items-center gap-3 text-muted-foreground hover:text-foreground text-sm tracking-wide transition-colors"
-              >
+              {/* btn-ghost de utilities.css */}
+              <a href="/novedades" className="btn-ghost text-sm">
                 Ver Novedades
               </a>
             </div>
+          </div>
+        </section>
+
+        {/* ── Trust Bar ── */}
+        <section className="border-y border-border bg-background">
+          <div className="max-w-7xl mx-auto px-6 py-5 grid grid-cols-2 md:grid-cols-4 gap-6">
+            {[
+              { icon: "📦", text: "Envío gratis sobre $50.000" },
+              { icon: "↩️", text: "Devoluciones gratuitas 30 días" },
+              { icon: "🔒", text: "Pago 100% seguro" },
+              { icon: "💬", text: "Atención personalizada" },
+            ].map((item) => (
+              <div key={item.text} className="flex items-center gap-3">
+                <span className="text-lg" aria-hidden="true">{item.icon}</span>
+                <span className="text-xs text-muted-foreground tracking-wide">{item.text}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── Categorías Destacadas ── */}
+        <section className="max-w-7xl mx-auto px-6 py-24">
+          <p className="section-label mb-8">Explorar por categoría</p>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              { name: "Mujer", href: "/colecciones?category=mujer" },
+              { name: "Hombre", href: "/colecciones?category=hombre" },
+              { name: "Accesorios", href: "/colecciones?category=accesorios" },
+              { name: "Esenciales", href: "/colecciones?category=esenciales" },
+            ].map((cat, i) => (
+              <a
+                key={cat.name}
+                href={cat.href}
+                className="group relative aspect-[4/5] border border-border overflow-hidden bg-secondary/30 flex flex-col justify-end p-6 animate-fade-up hover:border-foreground/30 transition-colors delay-list transition-duration-base"
+                style={{ "--i": i } as React.CSSProperties}
+              >
+                {/* Geometric placeholder */}
+                <div className="bg-grid-category absolute inset-0" aria-hidden="true" />
+                <div
+                  className="motif-rotated"
+                  aria-hidden="true"
+                  style={{ "--i": i } as React.CSSProperties}
+                />
+                <div
+                  className="motif-square"
+                  aria-hidden="true"
+                  style={{ "--i": i } as React.CSSProperties}
+                />
+
+                {/* Category label */}
+                <div className="relative">
+                  <span className="font-display text-2xl text-foreground group-hover:translate-x-1 transition-transform transition-duration-base">
+                    {cat.name}
+                  </span>
+                  <span className="block text-xs text-muted-foreground mt-1 group-hover:text-foreground transition-colors transition-duration-base">
+                    Ver colección →
+                  </span>
+                </div>
+              </a>
+            ))}
           </div>
         </section>
 
@@ -80,9 +125,8 @@ export default async function Home() {
         <section className="bg-secondary py-24 px-6">
           <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <p className="text-xs tracking-[0.25em] uppercase text-muted-foreground mb-4">
-                Filosofía de marca
-              </p>
+              {/* section-label de utilities.css */}
+              <p className="section-label mb-4">Filosofía de marca</p>
               <h2 className="font-display text-5xl text-foreground leading-tight">
                 Diseño sin
                 <br />
@@ -93,10 +137,8 @@ export default async function Home() {
                 cortes exactos y una paleta atemporal que no sigue tendencias —
                 las define.
               </p>
-              <a
-                href="/nosotros"
-                className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-foreground border-b border-foreground pb-0.5 hover:border-muted-foreground hover:text-muted-foreground transition-colors"
-              >
+              {/* link-underline de utilities.css */}
+              <a href="/nosotros" className="mt-8 link-underline">
                 Conoce nuestra historia →
               </a>
             </div>

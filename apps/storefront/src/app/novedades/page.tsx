@@ -1,8 +1,10 @@
 import { MOCK_PRODUCTS, CATEGORIES, filterByCategory } from '@/lib/mock-data'
+import { Navbar } from '@/components/Navbar'
 import { PageHeader } from '@/components/PageHeader'
 import { FilterBar } from '@/components/FilterBar'
 import { ProductGrid } from '@/components/ProductGrid'
 import { EmptyState } from '@/components/EmptyState'
+import { Footer } from '@/components/Footer'
 
 interface SearchParams {
   categoria?: string
@@ -31,25 +33,31 @@ export default async function NovedadesPage({ searchParams }: Props) {
 
   return (
     <>
-      <PageHeader
-        title="Novedades"
-        subtitle={`${products.length} productos`}
-        breadcrumbs={[{ label: 'Inicio', href: '/' }, { label: 'Novedades' }]}
-      />
+      <Navbar />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        <FilterBar categories={CATEGORIES} />
+      <main className="flex-1">
+        <PageHeader
+          title="Novedades"
+          subtitle={`${products.length} productos`}
+          breadcrumbs={[{ label: "Novedades" }]}
+        />
 
-        {products.length === 0 ? (
-          <EmptyState
-            title="Sin novedades por ahora"
-            description="Vuelve pronto, estamos actualizando el catálogo."
-            action={{ label: 'Ver todas las colecciones', href: '/colecciones' }}
-          />
-        ) : (
-          <ProductGrid products={products} />
-        )}
-      </div>
+        <div className="max-w-7xl mx-auto px-6 pb-16">
+          <FilterBar categories={CATEGORIES} />
+
+          {products.length === 0 ? (
+            <EmptyState
+              title="Sin novedades por ahora"
+              description="Vuelve pronto, estamos actualizando el catálogo."
+              action={{ label: 'Ver todas las colecciones', href: '/colecciones' }}
+            />
+          ) : (
+            <ProductGrid products={products} />
+          )}
+        </div>
+      </main>
+
+      <Footer />
     </>
   )
 }
